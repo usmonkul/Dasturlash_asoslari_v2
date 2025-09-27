@@ -134,19 +134,7 @@ Bu kurs 10-15 yoshdagi bolalarga web-dasturlash asoslarini o'rgatish uchun mo'lj
 **Amaliy ish:** Interaktiv salomlashish sahifasi
 
 ---
-
-### **MODUL 12: DOM Manipulation**
-- DOM nima?
-- getElementById va querySelector
-- HTML mazmunini o'zgartirish
-- CSS stillarini JavaScript orqali o'zgartirish
-- Event listeners
-
-**Amaliy ish:** Rangni o'zgartiruvchi sahifa
-
----
-
-### **MODUL 13: JavaScript Shartlar va Tsikllar**
+### **MODUL 12: JavaScript Shartlar va Tsikllar**
 - If/else shartli operatorlar
 - Switch statement
 - For va while tsikllar
@@ -154,6 +142,17 @@ Bu kurs 10-15 yoshdagi bolalarga web-dasturlash asoslarini o'rgatish uchun mo'lj
 - Massivlarni ko'rsatish
 
 **Amaliy ish:** To-do ro'yxati yaratish
+
+---
+
+### **MODUL 13: DOM Manipulation**
+- DOM nima?
+- getElementById va querySelector
+- HTML mazmunini o'zgartirish
+- CSS stillarini JavaScript orqali o'zgartirish
+- Event listeners
+
+**Amaliy ish:** Rangni o'zgartiruvchi sahifa
 
 ---
 
