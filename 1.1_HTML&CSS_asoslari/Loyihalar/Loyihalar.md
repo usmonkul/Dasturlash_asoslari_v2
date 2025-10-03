@@ -20,3 +20,7 @@ Figma design: https://www.figma.com/design/c8rczxjF1Bqd9lSPbiE3V7/Design-collect
 ## 5. Hometown website
 
 Figma design: https://www.figma.com/design/c8rczxjF1Bqd9lSPbiE3V7/Design-collection?node-id=34-2&t=xMMeDBl9RARRoDzg-1
+
+## 6. Sign Up form page
+
+Figma design: https://www.figma.com/design/c8rczxjF1Bqd9lSPbiE3V7/Design-collection?node-id=4480-2&t=2u8rKyDNP1jx1Z2x-1
