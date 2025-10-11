@@ -379,7 +379,6 @@ Endi yozuvlar rangli chiqadi.
 
 <details>
     <summary>Express bilan birinchi server</summary>
----
 
 ## 🗓️ 1-hafta — 3-dars
 
@@ -387,22 +386,31 @@ Endi yozuvlar rangli chiqadi.
 
 ---
 
-### Express nima va nega kerak?
+### 🎯 Bu darsda nima o'rganamiz?
 
-Node.js bilan ham server yozish mumkin, lekin har safar ko‘p kod yozish kerak bo‘ladi va chalkash bo‘lib ketadi.
-**Express** — bu Node.js uchun yozilgan maxsus kutubxona (tayyor kodlar to‘plami).
-Biz undan foydalansak:
-
-* Serverni juda tez ishga tushira olamiz.
-* Turli manzillar (yo‘llar) yaratib, turli ma’lumot yubora olamiz.
-* Katta kodlar o‘rniga bir necha qator bilan ishni boshlaymiz.
-
-**Oddiy hayotiy misol:**
-Express — bu “tayyor oshxona”. O‘zingiz ham oshxona qurishingiz mumkin, lekin Express borida hammasi tayyor: gaz plitasi, idish-tovoq, pichoq. Siz faqat taom tayyorlaysiz.
+* Express nima va nega kerak
+* Birinchi serverni qanday yaratish
+* Oddiy yo'llar (routes) yaratish
+* Brauzerda natijalarni ko'rish
 
 ---
 
-### Express o‘rnatish
+### Express nima va nega kerak?
+
+Node.js bilan ham server yozish mumkin, lekin har safar ko'p kod yozish kerak bo'ladi va chalkash bo'lib ketadi.
+**Express** — bu Node.js uchun yozilgan maxsus kutubxona (tayyor kodlar to'plami).
+Biz undan foydalansak:
+
+* Serverni juda tez ishga tushira olamiz.
+* Turli manzillar (yo'llar) yaratib, turli ma'lumot yubora olamiz.
+* Katta kodlar o'rniga bir necha qator bilan ishni boshlaymiz.
+
+**Oddiy hayotiy misol:**
+Express — bu "tayyor oshxona". O'zingiz ham oshxona qurishingiz mumkin, lekin Express borida hammasi tayyor: gaz plitasi, idish-tovoq, pichoq. Siz faqat taom tayyorlaysiz.
+
+---
+
+### Express o'rnatish
 
 1. Papka ochamiz: `backend-lessons`
 2. Terminalda shu papkaga kiring.
@@ -412,13 +420,13 @@ Express — bu “tayyor oshxona”. O‘zingiz ham oshxona qurishingiz mumkin, 
 npm init -y
 ```
 
-4. Expressni o‘rnating:
+4. Expressni o'rnating:
 
 ```bash
 npm install express
 ```
 
-✅ Endi Express loyihangizga qo‘shildi.
+✅ Endi Express loyihangizga qo'shildi.
 
 ---
 
@@ -433,12 +441,12 @@ const app = express();            // Server dasturini yaratdik
 const PORT = 3000;                // Server ishlaydigan port
 
 // Asosiy manzil — bu / (ildiz)
-app.get('/', (req, res) => {
+app.get('/', function(req, res) {
   res.send('Salom! Bu mening birinchi backend serverim 🚀');
 });
 
 // Serverni ishga tushiramiz
-app.listen(PORT, () => {
+app.listen(PORT, function() {
   console.log(`Server ishga tushdi: http://localhost:${PORT}`);
 });
 ```
@@ -449,368 +457,203 @@ Keyin terminalda ishga tushiring:
 node server.js
 ```
 
-Brauzerga `http://localhost:3000` kirib ko‘ring.
+Brauzerga `http://localhost:3000` kirib ko'ring.
 Sizning yozgan matningiz ekranga chiqadi.
+
+✅ **Tabriklaymiz!** Siz birinchi backend serveringizni ishga tushirdingiz!
+
+---
+
+### Kod qanday ishlaydi?
+
+Keling, har bir qatorni tushunib olaylik:
+
+1. `import express from 'express'` — Express kutubxonasini chaqiramiz
+2. `const app = express()` — Serverimizni yaratamiz
+3. `const PORT = 3000` — Server qaysi "eshik"da tinglashini belgilaymiz
+4. `app.get('/', ...)` — Asosiy manzilga kelgan so'rovga javob beramiz
+5. `res.send(...)` — Foydalanuvchiga matn yuboramiz
+6. `app.listen(...)` — Serverni ishga tushiramiz
 
 ---
 
 ### **GET** tushunchasi
 
-Biz `app.get()` ishlatdik. **GET** — bu **so‘rov turi**.
+Biz `app.get()` ishlatdik. **GET** — bu **so'rov turi**.
 
-* Internetda foydalanuvchi serverdan ma’lumot olish uchun **GET** so‘rovi yuboradi.
+* Internetda foydalanuvchi serverdan ma'lumot olish uchun **GET** so'rovi yuboradi.
 * Brauzerda har safar manzil kiritganingizda aslida GET yuboriladi.
 
 Misol:
 
-* Siz `https://google.com` deb yozasiz → brauzer Google serveriga **GET** so‘rovi yuboradi → server sahifa qaytaradi.
+* Siz `https://google.com` deb yozasiz → brauzer Google serveriga **GET** so'rovi yuboradi → server sahifa qaytaradi.
 
-Express’da `app.get('/yo‘l', ...)` — “kimdir shu yo‘lga GET so‘rovi yuborsa, nima javob beramiz?” degani.
-
----
-
-### Turli yo‘llar (Routes) yaratish
-
-“Route” — bu serverdagi manzil yoki sahifa.
-
-```javascript
-app.get('/about', (req, res) => {
-  res.send('Bu — sayt haqida ma’lumot.');
-});
-
-app.get('/contact', (req, res) => {
-  res.send('Biz bilan bog‘lanish: contact@example.com');
-});
-```
-
-* `http://localhost:3000/about` ga kirsangiz “Bu — sayt haqida ma’lumot.”
-* `http://localhost:3000/contact` ga kirsangiz “Biz bilan bog‘lanish: …”
+Express'da `app.get('/yo'l', ...)` — "kimdir shu yo'lga GET so'rovi yuborsa, nima javob beramiz?" degani.
 
 ---
 
-### JSON qaytarish
+### Turli yo'llar (Routes) yaratish
 
-Backendning eng muhim vazifasi — **JSON yuborish**. Bu ma’lumotni tartibli ko‘rsatadi.
+"Route" — bu serverdagi manzil yoki sahifa. Xuddi uyingizda turli xonalar bor kabi, serveringizda ham turli yo'llar bo'ladi.
 
-```javascript
-app.get('/user', (req, res) => {
-  res.json({
-    ism: 'Ali',
-    yosh: 14,
-    hobby: 'futbol'
-  });
-});
-```
-
-Brauzerga `http://localhost:3000/user` yozing.
-Siz JSON ma’lumotni ko‘rasiz — bu serverdan kelgan real javob.
-
----
-
-### Query va Params tushunchasi
-
-#### Query nima?
-
-* Query — bu manzilga `?` dan keyin yoziladigan ma’lumot.
-* Masalan: `http://localhost:3000/salom?ism=Ali`
-
-  * `ism=Ali` — bu query (so‘rov parametri).
-
-Kodni yozamiz:
-
-```javascript
-app.get('/salom', (req, res) => {
-  const ism = req.query.ism;    // ?ism=Ali orqali kelgan qiymat
-  res.send(`Salom, ${ism || 'mehmon'}!`);
-});
-```
-
-* Agar `?ism=Ali` qo‘ysangiz → “Salom, Ali!”
-* Agar hech narsa yozmasangiz → “Salom, mehmon!”
-
-#### Params nima?
-
-* Params — manzilning bir qismi sifatida yoziladigan ma’lumot.
-* Misol: `http://localhost:3000/user/15` → bu yerda **15** — params.
-
-```javascript
-app.get('/user/:id', (req, res) => {
-  const id = req.params.id;
-  res.send(`Siz so‘ragan foydalanuvchi ID: ${id}`);
-});
-```
-
-* `user/15` → “Siz so‘ragan foydalanuvchi ID: 15”
-* `user/42` → “Siz so‘ragan foydalanuvchi ID: 42”
-
-✅ Farq:
-
-* Query `?kalit=qiymat` (manzil oxirida, `?` bilan).
-* Params `/qiymat` (to‘g‘ridan-to‘g‘ri yo‘l ichida).
-
----
-
-### Avtomatik restart — Nodemon
-
-Serverni qayta ishga tushirishga hojat qolmasin, `nodemon` ishlatamiz:
-
-```bash
-npm install --save-dev nodemon
-```
-
-`package.json` da quyidagicha yozing:
-
-```json
-"scripts": {
-  "start": "nodemon server.js"
-}
-```
-
-Endi `npm start` deb yozsangiz, kodni saqlaganda server avtomatik yangilanadi.
-
----
-
-### Amaliy mashqlar
-
-1. `/books` yo‘lini yarating va kitoblar ro‘yxatini JSON qilib qaytaring:
-
-```json
-[
-  { "nomi": "Alpomish", "muallif": "Xalq og'zaki ijodi" },
-  { "nomi": "Ufq", "muallif": "Odil Yoqubov" }
-]
-```
-
-2. `/salom` yo‘lida `ism` query orqali foydalanuvchini kutib oling:
-   `/salom?ism=Dilshod` → “Salom, Dilshod!”
-
-3. `/time` yo‘lida joriy vaqtni qaytaring:
-
-```javascript
-app.get('/time', (req, res) => {
-  const hozir = new Date();
-  res.send(`Hozirgi vaqt: ${hozir.toLocaleTimeString()}`);
-});
-```
-
----
-
-### Asosiy tushunchalar
-
-* **Express** — serverni tez va oson yaratishga yordam beradi.
-* **GET** — ma’lumot so‘rash uchun ishlatiladi.
-* **Route (yo‘l)** — serverdagi manzillar.
-* **Query** — manzilga `?` bilan qo‘shiladigan ma’lumot.
-* **Params** — yo‘lning bir qismi sifatida keladigan qiymat.
-* **JSON** — backenddan ma’lumot yuborishning asosiy formati.
-
----
-
-</details>
-
-<hr>
-
-<details>
-    <summary>Express bilan birinchi server (takror va mustahkamlash)</summary>
-## 🗓️ 2-hafta — 1-dars
-
-### 🏷️ Mavzu: **Express bilan birinchi server (takror va mustahkamlash)**
-
----
-
-### Express nima?
-
-Oldingi darsda biz Express bilan tanishdik. Bugun esa amaliy jihatdan yana bir bor ko‘rib chiqamiz va butun sinf birga server ishga tushirib ko‘radi.
-
-* **Express** — Node.js uchun yozilgan juda mashhur kutubxona.
-* Server yaratishni osonlashtiradi va kodni tartibli qiladi.
-* Biz undan foydalanganimizda turli manzillarga (routes) juda tez javob bera olamiz.
-
----
-
-### Express’ni o‘rnatish
-
-1. Papka yarating yoki oldingi loyihadan foydalaning (masalan: `backend-lessons`).
-2. Terminalda shu papkaga kiring va quyidagilarni yozing:
-
-```bash
-npm init -y
-```
-
-Bu loyiha uchun kerakli `package.json` faylini yaratadi.
-
-3. Express’ni o‘rnating:
-
-```bash
-npm install express
-```
-
-✅ Shu bilan loyihaga Express qo‘shildi.
-
----
-
-### Birinchi server kodi
-
-`server.js` faylini yarating va quyidagicha yozing:
-
-```javascript
-import express from 'express';       // Express kutubxonasini chaqiramiz (ES Module syntax)
-const app = express();               // Server yaratamiz
-const PORT = 3000;                    // Port — server tinglaydigan eshik raqami
-
-// Asosiy sahifa uchun GET so'roviga javob
-app.get('/', (req, res) => {
-  res.send('Salom! Mening birinchi backend serverim 🚀');
-});
-
-// Serverni ishga tushiramiz
-app.listen(PORT, () => {
-  console.log(`Server ishga tushdi: http://localhost:${PORT}`);
-});
-```
-
-**Izoh:**
-
-* `import express from 'express'` — loyihaga Express kutubxonasini chaqirish (ES Module syntax).
-* `app.get('/', ...)` — `GET` so‘roviga javob berish (asosiy manzil `/`).
-* `res.send()` — foydalanuvchiga matn yuboradi.
-* `app.listen(PORT, ...)` — serverni ishga tushiradi va ko‘rsatilgan portni tinglaydi.
-
----
-
-### Serverni ishga tushirish
-
-Terminalda yozing:
-
-```bash
-node server.js
-```
-
-Agar hammasi to‘g‘ri bo‘lsa, quyidagiga o‘xshash yozuv chiqadi:
-
-```
-Server ishga tushdi: http://localhost:3000
-```
-
-Endi brauzerga `http://localhost:3000` yozing — sahifada `Salom! Mening birinchi backend serverim 🚀` degan yozuv chiqadi.
-
-✅ Tabriklaymiz! Sizning shaxsiy backend serveringiz ishlayapti.
-
----
-
-### Foydali mashqlar
-
-1. `about` degan yangi yo‘l yarating:
-
-```javascript
-app.get('/about', (req, res) => {
-  res.send('Bu mening sayt haqidagi sahifa.');
-});
-```
-
-Brauzerda: `http://localhost:3000/about`
-
-2. `contact` degan yo‘l yarating:
-
-```javascript
-app.get('/contact', (req, res) => {
-  res.send('Biz bilan bog‘lanish: contact@example.com');
-});
-```
-
-Brauzerda: `http://localhost:3000/contact`
-
-3. `books` degan yo‘l yarating va JSON qaytaring:
-
-```javascript
-app.get('/books', (req, res) => {
-  res.json([
-    { nomi: 'Alpomish', muallif: 'Xalq og‘zaki ijodi' },
-    { nomi: 'Ufq', muallif: 'Odil Yoqubov' }
-  ]);
-});
-```
-
-Brauzerda: `http://localhost:3000/books`
-
----
-
-### Oddiy tushunchalarni mustahkamlash
-
-* **GET** — serverdan ma’lumot so‘rash turi.
-* **Route (yo‘l)** — manzil, masalan `/`, `/about`, `/books`.
-* **res.send()** — matn yoki HTML qaytaradi.
-* **res.json()** — JSON ma’lumot qaytaradi.
-* **Port** — server ishlaydigan eshik raqami (odatda 3000 yoki 5000).
-
----
-
-</details>
-
-<hr>
-
-
-<details>
-    <summary>Routes va JSON javobi</summary>
-## 🗓️ 2-hafta — 2-dars
-
-### 🏷️ Mavzu: **Routes va JSON javobi**
-
----
-
-### Route nima?
-
-**Route** (yo‘l) — bu serverdagi manzil.
-Har safar foydalanuvchi brauzerda biror manzilga kirganda, server shu manzilga qarab javob beradi.
-
-Misol:
-
-* `http://localhost:3000/` → asosiy sahifa.
-* `http://localhost:3000/about` → haqida sahifa.
-* `http://localhost:3000/hello` → salomlashish sahifasi.
-
-Biz har bir manzil uchun alohida **route** yozamiz.
-
----
-
-### Matn yuborish (takrorlash)
-
-`server.js` faylida:
+Keling, yana 2 ta yo'l qo'shamiz:
 
 ```javascript
 import express from 'express';
 const app = express();
 const PORT = 3000;
 
-app.get('/', (req, res) => {
-  res.send('Salom! Bu asosiy sahifa.');
+// 1-yo'l: Asosiy sahifa
+app.get('/', function(req, res) {
+  res.send('Salom! Bu asosiy sahifa 🏠');
 });
 
-app.listen(PORT, () => {
-  console.log(`Server http://localhost:${PORT} da ishlayapti`);
+// 2-yo'l: Haqida sahifa
+app.get('/about', function(req, res) {
+  res.send('Bu — sayt haqida ma'lumot 📖');
+});
+
+// 3-yo'l: Kontakt sahifa
+app.get('/contact', function(req, res) {
+  res.send('Biz bilan bog\'lanish: contact@example.com 📧');
+});
+
+app.listen(PORT, function() {
+  console.log(`Server ishga tushdi: http://localhost:${PORT}`);
 });
 ```
 
-✅ `res.send()` — foydalanuvchiga oddiy matn yuboradi.
+Endi brauzerda sinab ko'ring:
+* `http://localhost:3000/` → "Salom! Bu asosiy sahifa 🏠"
+* `http://localhost:3000/about` → "Bu — sayt haqida ma'lumot 📖"
+* `http://localhost:3000/contact` → "Biz bilan bog'lanish: ..."
 
 ---
 
-### JSON yuborish
+### 🎮 Amaliy mashqlar
 
-Backendning eng katta kuchi — **JSON** ma’lumot yuborish.
-JSON — bu ma’lumotni tartibli qilib ko‘rsatish usuli.
+**1-mashq:** `/hello` degan yo'l yarating
 
 ```javascript
-app.get('/user', (req, res) => {
-  res.json({
-    ism: 'Ali',
-    yosh: 14,
-    hobby: 'futbol'
-  });
+app.get('/hello', function(req, res) {
+  res.send('Salom, dunyo! 🌍');
 });
 ```
 
-Brauzerda `http://localhost:3000/user` ga kirsangiz:
+**2-mashq:** `/time` degan yo'l yarating, u hozirgi vaqtni ko'rsatsin
+
+```javascript
+app.get('/time', function(req, res) {
+  const hozir = new Date();
+  res.send(`Hozirgi vaqt: ${hozir.toLocaleTimeString()}`);
+});
+```
+
+**3-mashq:** `/hobby` degan yo'l yarating, o'zingizning sevimli mashg'ulotingizni yozing
+
+```javascript
+app.get('/hobby', function(req, res) {
+  res.send('Mening sevimli mashg\'ulotim: dasturlash 💻');
+});
+```
+
+---
+
+### Kodni yangilash va sinash
+
+Hozir server kodini o'zgartirganda, uni qayta ishga tushirish kerak:
+
+1. Terminalda **CTRL + C** ni bosing (serverni to'xtatish)
+2. Yana `node server.js` yozing (qayta ishga tushirish)
+3. Brauzerda sahifani yangilang (Refresh/F5)
+
+> Keyingi darsda biz buni avtomatik qilishni o'rganamiz!
+
+---
+
+### 🌟 Ajoyib loyiha: O'zingiz haqingizda mini-sayt
+
+Keling, barcha bilimlaringizni birlashtirgan holda kichik loyiha yarataylik:
+
+```javascript
+import express from 'express';
+const app = express();
+const PORT = 3000;
+
+app.get('/', function(req, res) {
+  res.send('<h1>Mening Mini Saytim 🌟</h1><p>Bosh sahifaga xush kelibsiz!</p>');
+});
+
+app.get('/about', function(req, res) {
+  res.send('<h1>Men haqimda 👤</h1><p>Ismim: [sizning ismingiz]</p><p>Yoshim: 14</p>');
+});
+
+app.get('/hobbies', function(req, res) {
+  res.send('<h1>Qiziqishlarim 🎯</h1><ul><li>Dasturlash</li><li>Futbol</li><li>Kitob o\'qish</li></ul>');
+});
+
+app.get('/contact', function(req, res) {
+  res.send('<h1>Bog\'lanish 📞</h1><p>Email: sizning@email.com</p>');
+});
+
+app.listen(PORT, function() {
+  console.log(`🚀 Mini saytingiz tayyor: http://localhost:${PORT}`);
+});
+```
+
+**Topshiriq:** Yuqoridagi kodga o'zingiz haqingizdagi ma'lumotlarni qo'ying va ishga tushiring!
+
+---
+
+### Asosiy tushunchalar
+
+* **Express** — serverni tez va oson yaratishga yordam beradi.
+* **GET** — ma'lumot so'rash uchun ishlatiladi.
+* **Route (yo'l)** — serverdagi manzillar (masalan `/`, `/about`, `/contact`).
+* **res.send()** — foydalanuvchiga matn yoki HTML yuboradi.
+* **PORT** — server qaysi "eshik"da ishlashi kerak (odatda 3000).
+
+---
+
+### 🏆 Nima o'rgandik?
+
+✅ Express'ni o'rnatdik va ishlatdik
+✅ Birinchi serverimizni yaratdik
+✅ Bir nechta yo'llar (routes) yaratdik
+✅ Brauzerda natijalarni ko'rdik
+✅ Kichik loyiha yasadik
+
+**Keyingi darsda:** Serverdan JSON ma'lumot yuborish va Thunder Client bilan ishlashni o'rganamiz! 🎯
+
+---
+
+</details>
+
+<hr>
+
+<details>
+    <summary>JSON ma'lumot va Thunder Client</summary>
+
+## 🗓️ 2-hafta — 1-dars
+
+### 🏷️ Mavzu: **JSON ma'lumot va Thunder Client**
+
+---
+
+### 🎯 Bu darsda nima o'rganamiz?
+
+* JSON nima va nega kerak
+* `res.json()` va `res.send()` farqi
+* Thunder Client'ni qanday ishlatish
+* API test qilish
+
+---
+
+### JSON nima? (Qisqa takrorlash)
+
+Birinchi darsda biz JSON haqida bilib olgan edik. Keling, yana bir bor eslaymiz:
+
+**JSON** — bu ma'lumotlarni internet orqali yuborishning eng qulay usuli.
 
 ```json
 {
@@ -820,191 +663,200 @@ Brauzerda `http://localhost:3000/user` ga kirsangiz:
 }
 ```
 
-✅ `res.json()` — foydalanuvchiga JSON formatida ma’lumot yuboradi.
+Bu — bitta **obyekt**. Ichida 3 ta ma'lumot bor: ism, yosh va hobby.
 
 ---
 
-### Bir nechta routes yaratish
+### res.send() vs res.json()
 
-Serverda turli manzillar uchun turli ma’lumotlar qaytarishimiz mumkin.
+Oldingi darsda biz `res.send()` ishlatgan edik. Endi yangi narsa o'rganamiz: `res.json()`
 
-```javascript
-app.get('/about', (req, res) => {
-  res.json({
-    loyiha: 'Backend asoslari',
-    muallif: 'Sizning ismingiz',
-    til: 'JavaScript (Node.js + Express)'
-  });
-});
-
-app.get('/hello', (req, res) => {
-  res.json({
-    salom: 'Salom, dunyo!',
-    vaqt: new Date().toLocaleTimeString()
-  });
-});
-```
-
-* `http://localhost:3000/about` → loyiha haqida JSON ko‘rsatadi.
-* `http://localhost:3000/hello` → salomlashadi va hozirgi vaqtni ko‘rsatadi.
-
----
-
-### Amaliy faoliyat
-
-🛠 **Mashq:** “O‘zim haqimda API”
-
-1. `info` degan yangi route yarating.
-2. `ism`, `yosh`, `hobby`, `maktab` kabi maydonlarni qo‘shing.
-3. JSON ko‘rinishida qaytaring.
-
-Masalan:
+**Farq qanday?**
 
 ```javascript
-app.get('/info', (req, res) => {
+// res.send() — oddiy matn yuboradi
+app.get('/hello', function(req, res) {
+  res.send('Salom, dunyo!');
+});
+
+// res.json() — JSON formatda ma'lumot yuboradi
+app.get('/user', function(req, res) {
   res.json({
-    ism: 'Dilshod',
+    ism: 'Ali',
     yosh: 14,
-    hobby: 'dasturlash',
-    maktab: '12-maktab'
+    hobby: 'futbol'
   });
 });
 ```
 
-Brauzerda:
-`http://localhost:3000/info` ga kirsangiz, o‘zingiz haqingizdagi ma’lumot JSON bo‘lib chiqadi.
+**Qachon qaysi birini ishlatamiz?**
+* `res.send()` → oddiy matn yoki HTML uchun
+* `res.json()` → ma'lumotlar (obyekt, array) uchun ✅
 
 ---
 
-### Yakuniy tushunchalar
+### Birinchi JSON API'miz
 
-* **Route (yo‘l)** — serverdagi har bir manzil (masalan `/about` yoki `/hello`).
-* **`res.send()`** — oddiy matn yoki HTML yuboradi.
-* **`res.json()`** — JSON formatida ma’lumot yuboradi.
-* Har bir route foydalanuvchiga boshqa javob yuborishi mumkin.
+Keling, kitoblar ro'yxatini qaytaradigan API yarataylik:
 
----
+```javascript
+import express from 'express';
+const app = express();
+const PORT = 3000;
 
-</details>
+// Bitta kitob haqida ma'lumot
+app.get('/kitob', function(req, res) {
+  res.json({
+    nomi: 'Alpomish',
+    muallif: 'Xalq og\'zaki ijodi',
+    sahifalar: 120,
+    til: 'O\'zbek'
+  });
+});
 
-<hr>
+// Bir nechta kitoblar ro'yxati
+app.get('/kitoblar', function(req, res) {
+  res.json([
+    { nomi: 'Alpomish', muallif: 'Xalq og\'zaki ijodi' },
+    { nomi: 'Ufq', muallif: 'Odil Yoqubov' },
+    { nomi: 'Kecha va Kunduz', muallif: 'Cho\'lpon' }
+  ]);
+});
 
-
-<details>
-    <summary>Nodemon va Thunder Client bilan qulay ishlash</summary>
-## 🗓️ 2-hafta — 3-dars
-
-### 🏷️ Mavzu: **Nodemon va Thunder Client bilan qulay ishlash**
-
----
-
-### Nodemon nima?
-
-Biz hozircha server kodini o‘zgartirgandan so‘ng uni **CTRL + C** bilan to‘xtatib, yana `node server.js` deb ishga tushirishga majbur bo‘lyapmiz. Bu juda noqulay.
-
-**Nodemon** — serverni avtomatik qayta ishga tushiradigan dastur. Kodni saqlash bilan birga server o‘zi yangilanadi. Juda tez ishlash imkonini beradi.
-
----
-
-### Nodemon o‘rnatish
-
-Terminalda yozing:
-
-```bash
-npm install --save-dev nodemon
+app.listen(PORT, function() {
+  console.log(`Server: http://localhost:${PORT}`);
+});
 ```
 
-> `--save-dev` — bu paketni faqat dastur yozish jarayonida kerak bo‘ladi, keyinchalik server ishlashi uchun majburiy emas.
-
-`package.json` faylida endi “devDependencies” degan joyga nodemon qo‘shiladi.
-
----
-
-### package.json dagi script sozlash
-
-`package.json` faylini ochib, `"scripts"` bo‘limini toping va quyidagicha yozing:
-
-```json
-"scripts": {
-  "start": "nodemon server.js"
-}
-```
-
-Endi serverni ishga tushirish uchun terminalda faqat buni yozamiz:
-
-```bash
-npm start
-```
-
-✅ Endi kodni saqlash bilan birga server avtomatik qayta yuklanadi.
+Brauzerda sinab ko'ring:
+* `http://localhost:3000/kitob` → bitta kitob ma'lumoti
+* `http://localhost:3000/kitoblar` → kitoblar ro'yxati
 
 ---
 
 ### Thunder Client nima?
 
-Backend yozayotganda brauzer faqat **GET** so‘rovlarini yubora oladi. Ammo biz tez orada **POST, PUT, DELETE** kabi boshqa so‘rov turlarini ham ishlatamiz. Shuning uchun test qilish uchun maxsus vosita kerak.
+Brauzer faqat **GET** so'rovlarini yuborishi mumkin. Lekin biz keyinroq **POST**, **DELETE** va boshqa so'rovlarni ham yuborishimiz kerak bo'ladi.
 
-**Thunder Client** — bu VS Code ichidagi qulay plagin. U orqali:
+**Thunder Client** — bu VS Code ichidagi maxsus vosita. U bizga:
+* Har xil turdagi so'rovlar yuborish imkonini beradi
+* JSON ma'lumot yuborish va olish oson
+* Natijalarni chiroyli ko'rish mumkin
 
-* GET, POST, PUT, DELETE so‘rovlari yuborish mumkin.
-* JSON ma’lumot jo‘natish mumkin.
-* Javobni chiroyli ko‘rish mumkin.
-
----
-
-### Thunder Client o‘rnatish
-
-1. VS Code’ni oching.
-2. Chap tomondagi Extensions (kattalashtirilgan “pazl” belgisi) ga kiring.
-3. Qidiruvdan **Thunder Client** yozing va o‘rnating.
-
-VS Code’da endi chap tomonda chaqmoqcha belgili Thunder Client tugmasi paydo bo‘ladi.
+**Oddiy misol:**
+Thunder Client — bu pochta bo'limi. Siz server uchun xat (so'rov) yozasiz va serverdan javob olasiz.
 
 ---
 
-### Thunder Client bilan sinash
+### Thunder Client o'rnatish
 
-1. Thunder Client oynasini oching (chap tomonda chaqmoq belgisi).
-2. “New Request” tugmasini bosing.
-3. Method: GET
-4. URL: `http://localhost:3000`
-5. Send tugmasini bosing → serverdan javob ko‘rasiz.
+1. VS Code'ni oching
+2. Chap tomonda **Extensions** (pazl belgisi) ni bosing
+3. Qidiruv qismiga **Thunder Client** yozing
+4. **Install** tugmasini bosing
+5. Chap tomonda yangi chaqmoqcha 雷 belgisi paydo bo'ladi
+
+✅ Tayyor! Endi ishlatishimiz mumkin.
 
 ---
 
-### Mashq: `/greet` route yaratish
+### Thunder Client bilan birinchi test
 
-`server.js` faylida yangi yo‘l qo‘shamiz:
+**1-qadam:** Server ishga tushirilganiga ishonch hosil qiling
+
+```bash
+node server.js
+```
+
+**2-qadam:** Thunder Client'ni oching
+* Chap tomonda **Thunder Client** belgisini bosing
+* **New Request** tugmasini bosing
+
+**3-qadam:** So'rov yuboring
+* **Method:** GET (default bo'ladi)
+* **URL:** `http://localhost:3000/kitoblar`
+* **Send** tugmasini bosing
+
+✅ Natija: Kitoblar ro'yxati JSON formatda chiqadi!
+
+---
+
+### 🎮 Amaliy mashqlar
+
+**Mashq 1:** O'yinlar API'si yarating
 
 ```javascript
-app.get('/greet', (req, res) => {
-  const name = req.query.name;   // ?name=Ali orqali yuborilgan ismni olamiz
-  res.send(`Salom, ${name || 'mehmon'}!`);
+app.get('/oyinlar', function(req, res) {
+  res.json([
+    { nomi: 'Minecraft', janr: 'Sandbox', yil: 2011 },
+    { nomi: 'FIFA 24', janr: 'Sport', yil: 2023 },
+    { nomi: 'GTA 5', janr: 'Action', yil: 2013 }
+  ]);
 });
 ```
 
-> Bu degani: agar foydalanuvchi manzilga `?name=Ali` qo‘shsa, server “Salom, Ali!” deb javob beradi. Agar hech narsa yubormasa — “Salom, mehmon!”.
+Thunder Client orqali test qiling!
+
+**Mashq 2:** Meva-cheva API'si
+
+```javascript
+app.get('/mevalar', function(req, res) {
+  res.json([
+    { nomi: 'Olma', rang: 'qizil', narx: 5000 },
+    { nomi: 'Banan', rang: 'sariq', narx: 8000 },
+    { nomi: 'Uzum', rang: 'yashil', narx: 15000 }
+  ]);
+});
+```
+
+**Mashq 3:** O'zingiz haqingizda API
+
+```javascript
+app.get('/men', function(req, res) {
+  res.json({
+    ism: 'Sizning ismingiz',
+    yosh: 14,
+    maktab: '12-maktab',
+    sevimli_fan: 'Informatika',
+    qiziqishlar: ['Dasturlash', 'Futbol', 'Rasm chizish']
+  });
+});
+```
 
 ---
 
-### `/greet` ni Thunder Client’da tekshirish
+### Foydali maslahat 💡
 
-1. Thunder Client’ni oching.
-2. New Request → Method: GET
-3. URL:
+**Brauzerdagi natijani chiroyliroq ko'rish:**
 
-   * `http://localhost:3000/greet?name=Ali`
-   * `http://localhost:3000/greet?name=Aziza`
-   * `http://localhost:3000/greet`
-4. Har birini yuboring va javobning qanday o‘zgarganini ko‘ring.
+Brauzerga maxsus extension o'rnatish mumkin:
+* Chrome: **JSON Formatter**
+* Firefox: **JSON Lite**
+
+Yoki shunchaki Thunder Client ishlatishingiz mumkin — u avtomatik chiroyli ko'rsatadi!
 
 ---
 
-### Foydali tushunchalar
+### Asosiy tushunchalar
 
-* **Nodemon** — kodni saqlaganda server avtomatik qayta ishga tushadi.
-* **Thunder Client** — turli so‘rovlarni (GET, POST, DELETE va hokazo) qulay test qilishga yordam beradi.
-* **Query** — URL’ning oxiridagi `?kalit=qiymat` ko‘rinishidagi qism.
+* **JSON** — ma'lumotlarni internet orqali yuborishning standart usuli
+* **res.json()** — JSON formatda javob yuboradi
+* **res.send()** — oddiy matn yuboradi
+* **Thunder Client** — VS Code ichidagi API test qilish vositasi
+* **Array** — bir nechta obyektlar ro'yxati `[{}, {}]`
+* **Obyekt** — ma'lumotlar to'plami `{ kalit: qiymat }`
+
+---
+
+### 🏆 Nima o'rgandik?
+
+✅ JSON formatda ma'lumot yuborishni
+✅ res.json() va res.send() farqini
+✅ Thunder Client'ni o'rnatishni va ishlatishni
+✅ API'larni test qilishni
+✅ Array va obyekt bilan ishlashni
+
+**Keyingi darsda:** Query parametrlari bilan ishlashni o'rganamiz — foydalanuvchi serverga ma'lumot yuborishi! 🎯
 
 ---
 
@@ -1012,201 +864,570 @@ app.get('/greet', (req, res) => {
 
 <hr>
 
-
 <details>
-    <summary>Query va Params bilan ishlash (Requests & Data)</summary>
-## 🗓️ 3-hafta — 1-dars
+    <summary>Query parametrlari — Foydalanuvchidan ma'lumot olish</summary>
 
-### 🏷️ Mavzu: **Query va Params bilan ishlash (Requests & Data)**
+## 🗓️ 2-hafta — 2-dars
+
+### 🏷️ Mavzu: **Query parametrlari — Foydalanuvchidan ma'lumot olish**
 
 ---
 
-### So‘rov (Request) nima?
+### 🎯 Bu darsda nima o'rganamiz?
 
-Server bilan ishlashni boshlaganimizda, foydalanuvchi (yoki brauzer) serverga **so‘rov** yuboradi. Bu xuddi biror odamga savol berishdek: “Menga ma’lumot yubor”.
-
-So‘rovda ikki xil ma’lumot kelishi mumkin:
-
-1. **Query (so‘rov parametrlari)** — URL oxirida `?` belgisidan keyin keladi.
-2. **Params (yo‘l parametrlari)** — URL yo‘lining bir qismi sifatida yoziladi.
-
-Bugun shu ikkisini farqlab, real misollarda ishlatib ko‘ramiz.
+* Query parametrlari nima
+* URL orqali ma'lumot qanday yuboriladi
+* `req.query` bilan ishlash
+* Dinamik javoblar yaratish
 
 ---
 
 ### Query nima?
 
-**Query** — foydalanuvchi URL oxiriga qo‘shimcha ma’lumot yozib yuboradi.
+**Query** — bu URL oxiriga qo'shiladigan qo'shimcha ma'lumot.
 
 Misol:
-`http://localhost:3000/search?kitob=Alpomish`
+```
+http://localhost:3000/salom?ism=Ali
+```
+
 Bu yerda:
+* `?` — query qismi boshlanadi
+* `ism` — kalit (key)
+* `Ali` — qiymat (value)
 
-* `?` — query qismi boshlanishi.
-* `kitob` — kalit.
-* `Alpomish` — qiymat.
-
-Ko‘pincha query foydalanuvchi nimani izlayotgani, qaysi ma’lumotni olishni xohlayotganini bildiradi.
-
-#### Express’da Query olish
-
-```javascript
-app.get('/search', (req, res) => {
-  const kitob = req.query.kitob; // foydalanuvchi yuborgan 'kitob'
-  res.send(`Siz izlayotgan kitob: ${kitob}`);
-});
+**Real hayotdan misol:**
+YouTube'da video qidirganingizda:
+```
+https://www.youtube.com/results?search_query=javascript
 ```
 
-Endi brauzerda sinab ko‘ring:
-
-* `http://localhost:3000/search?kitob=Alpomish`
-  → “Siz izlayotgan kitob: Alpomish”
-* `http://localhost:3000/search?kitob=Ufq`
-  → “Siz izlayotgan kitob: Ufq”
-
-Agar foydalanuvchi query yozmasa, qiymat `undefined` bo‘ladi. Uni oldini olish uchun zaxira qiymat berish mumkin:
-
-```javascript
-app.get('/search', (req, res) => {
-  const kitob = req.query.kitob || 'hech narsa yuborilmadi';
-  res.send(`Siz izlayotgan kitob: ${kitob}`);
-});
-```
+`search_query=javascript` — bu query parametri!
 
 ---
 
-### Params nima?
+### Birinchi query parametrimiz
 
-**Params** — bu URL yo‘lining bir qismi sifatida yoziladigan ma’lumot.
-Ko‘pincha aniq bitta elementni chaqirish uchun ishlatiladi.
-
-Misol:
-`http://localhost:3000/books/10`
-Bu yerda:
-
-* `books` — yo‘l nomi.
-* `10` — params (kitob ID’si).
-
-#### Express’da Params olish
+Keling, salomlashadigan API yarataylik:
 
 ```javascript
-app.get('/books/:id', (req, res) => {
-  const id = req.params.id;  // foydalanuvchi yuborgan :id qiymati
-  res.send(`Siz so‘ragan kitob ID: ${id}`);
+import express from 'express';
+const app = express();
+const PORT = 3000;
+
+app.get('/salom', function(req, res) {
+  const ism = req.query.ism;  // URL dan "ism" ni olamiz
+  res.send(`Salom, ${ism}!`);
+});
+
+app.listen(PORT, function() {
+  console.log(`Server: http://localhost:${PORT}`);
 });
 ```
 
-Sinash:
+**Sinab ko'ramiz:**
+* `http://localhost:3000/salom?ism=Ali` → "Salom, Ali!"
+* `http://localhost:3000/salom?ism=Aziza` → "Salom, Aziza!"
+* `http://localhost:3000/salom?ism=Sardor` → "Salom, Sardor!"
 
-* `http://localhost:3000/books/15`
-  → “Siz so‘ragan kitob ID: 15”
-* `http://localhost:3000/books/42`
-  → “Siz so‘ragan kitob ID: 42”
+🎉 Ajoyib! Endi serverimiz foydalanuvchi yuborgan ma'lumotga javob beradi!
 
-Bir nechta params bo‘lishi ham mumkin:
+---
+
+### Xavfsizlik: Default qiymat berish
+
+Agar foydalanuvchi ism yubormasa nima bo'ladi?
+
+```
+http://localhost:3000/salom
+```
+
+Javob: "Salom, undefined!" — bu yaxshi emas! 😕
+
+**Yechim:** Default (zaxira) qiymat beramiz:
 
 ```javascript
-app.get('/users/:userId/books/:bookId', (req, res) => {
-  const user = req.params.userId;
-  const book = req.params.bookId;
-  res.send(`Foydalanuvchi ID: ${user}, Kitob ID: ${book}`);
+app.get('/salom', function(req, res) {
+  const ism = req.query.ism || 'mehmon';  // ism bo'lmasa "mehmon" deb oladi
+  res.send(`Salom, ${ism}!`);
 });
 ```
 
-URL: `http://localhost:3000/users/7/books/99`
-Natija: “Foydalanuvchi ID: 7, Kitob ID: 99”
+Endi:
+* `http://localhost:3000/salom?ism=Ali` → "Salom, Ali!"
+* `http://localhost:3000/salom` → "Salom, mehmon!"
+
+✅ Yaxshi! Endi xatolik chiqmaydi.
+
+---
+
+### Bir nechta query parametrlari
+
+Bir vaqtning o'zida bir nechta ma'lumot yuborish mumkin:
+
+```javascript
+app.get('/info', function(req, res) {
+  const ism = req.query.ism || 'Noma\'lum';
+  const yosh = req.query.yosh || 'Noma\'lum';
+  const shahar = req.query.shahar || 'Noma\'lum';
+  
+  res.json({
+    ism: ism,
+    yosh: yosh,
+    shahar: shahar,
+    xabar: `${ism} ${yosh} yoshda, ${shahar}dan`
+  });
+});
+```
+
+**Sinab ko'ring:**
+```
+http://localhost:3000/info?ism=Ali&yosh=14&shahar=Toshkent
+```
+
+Natija:
+```json
+{
+  "ism": "Ali",
+  "yosh": "14",
+  "shahar": "Toshkent",
+  "xabar": "Ali 14 yoshda, Toshkentdan"
+}
+```
+
+**E'tibor bering:** Bir nechta parametrni `&` belgisi bilan ajratamiz:
+* 1-parametr: `?ism=Ali`
+* 2-parametr: `&yosh=14`
+* 3-parametr: `&shahar=Toshkent`
+
+---
+
+### Qidiruv API'si yaratamiz
+
+Real loyihalarning ko'pida qidiruv bor. Keling, oddiy qidiruv API'si yarataylik:
+
+```javascript
+// Kitoblar ro'yxati (xotir ichida)
+const kitoblar = [
+  { id: 1, nomi: 'Alpomish', muallif: 'Xalq og\'zaki ijodi' },
+  { id: 2, nomi: 'Ufq', muallif: 'Odil Yoqubov' },
+  { id: 3, nomi: 'Kecha va Kunduz', muallif: 'Cho\'lpon' },
+  { id: 4, nomi: 'O\'tkan kunlar', muallif: 'Abdulla Qodiriy' }
+];
+
+app.get('/qidiruv', function(req, res) {
+  const qidiruv = req.query.q || '';  // ?q=Ufq
+  
+  if (qidiruv === '') {
+    return res.json({ xabar: 'Qidiruv so\'zi kiriting', misol: '/qidiruv?q=Ufq' });
+  }
+  
+  // Qidirish (oddiy usul - to'liq mos kelishi kerak)
+  const natija = kitoblar.filter(function(kitob) {
+    return kitob.nomi.toLowerCase().includes(qidiruv.toLowerCase());
+  });
+  
+  res.json({
+    qidiruv_sozi: qidiruv,
+    topildi: natija.length,
+    kitoblar: natija
+  });
+});
+```
+
+**Sinab ko'ring:**
+* `http://localhost:3000/qidiruv?q=Ufq`
+* `http://localhost:3000/qidiruv?q=kun`
+* `http://localhost:3000/qidiruv?q=Alpomish`
+
+---
+
+### 🎮 Amaliy mashqlar
+
+**Mashq 1:** Kalkulyator API
+
+```javascript
+app.get('/hisob', function(req, res) {
+  const a = Number(req.query.a) || 0;
+  const b = Number(req.query.b) || 0;
+  
+  res.json({
+    a: a,
+    b: b,
+    yigindi: a + b,
+    ayirma: a - b,
+    kopaytma: a * b,
+    bolish: a / b
+  });
+});
+```
+
+Test: `http://localhost:3000/hisob?a=10&b=5`
+
+**Mashq 2:** Tug'ilgan yildan yoshni hisoblash
+
+```javascript
+app.get('/yosh', function(req, res) {
+  const tugilgan_yil = Number(req.query.yil);
+  const hozirgi_yil = new Date().getFullYear();
+  const yosh = hozirgi_yil - tugilgan_yil;
+  
+  res.json({
+    tugilgan_yil: tugilgan_yil,
+    hozirgi_yil: hozirgi_yil,
+    yosh: yosh,
+    xabar: `Siz ${yosh} yoshdasiz`
+  });
+});
+```
+
+Test: `http://localhost:3000/yosh?yil=2010`
+
+**Mashq 3:** Salomlashish tili
+
+```javascript
+app.get('/hi', function(req, res) {
+  const til = req.query.til || 'uz';
+  const ism = req.query.ism || 'Do\'stim';
+  
+  const salomlar = {
+    uz: 'Salom',
+    en: 'Hello',
+    ru: 'Привет',
+    tr: 'Merhaba'
+  };
+  
+  const salom = salomlar[til] || 'Salom';
+  
+  res.send(`${salom}, ${ism}!`);
+});
+```
+
+Test:
+* `http://localhost:3000/hi?ism=Ali&til=en`
+* `http://localhost:3000/hi?ism=Aziza&til=tr`
+
+---
+
+### Thunder Client bilan test qilish
+
+1. Thunder Client'ni oching
+2. **New Request** → GET
+3. URL yozing: `http://localhost:3000/salom?ism=Ali`
+4. Send bosing
+5. Query parametrlarini o'zgartiring va yana sinang
+
+**Maslahat:** Thunder Client'da "Query" bo'limi bor — u yerda parametrlarni qulay yozish mumkin!
+
+---
+
+### Asosiy tushunchalar
+
+* **Query** — URL oxiridagi qo'shimcha ma'lumot (`?kalit=qiymat`)
+* **req.query** — query parametrlarini olish uchun ishlatiladi
+* **Default qiymat** — `|| 'zaxira'` bilan xatoliklardan himoyalanamiz
+* **Bir nechta parametr** — `&` belgisi bilan ajratiladi
+* **Dinamik javob** — foydalanuvchi yuborgan ma'lumotga qarab javob o'zgaradi
+
+---
+
+### 🏆 Nima o'rgandik?
+
+✅ Query parametrlari nima ekanligini
+✅ req.query orqali ma'lumot olishni
+✅ Default qiymatlar berishni
+✅ Bir nechta parametr bilan ishlashni
+✅ Qidiruv API'si yaratishni
+✅ Dinamik javoblar qaytarishni
+
+**Keyingi darsda:** Route parametrlari (:id) va Nodemon'ni o'rganamiz! 🚀
+
+---
+
+</details>
+
+<hr>
+
+<details>
+    <summary>Route parametrlari va Nodemon</summary>
+
+## 🗓️ 2-hafta — 3-dars
+
+### 🏷️ Mavzu: **Route parametrlari va Nodemon**
+
+---
+
+### 🎯 Bu darsda nima o'rganamiz?
+
+* Route parametrlari (params) nima
+* Query va Params farqi
+* `:id` bilan ishlash
+* Nodemon o'rnatish va ishlatish
+
+---
+
+### Route parametrlari (Params) nima?
+
+**Params** — bu URL'ning o'zida joylashgan ma'lumot.
+
+**Query:**
+```
+http://localhost:3000/user?id=5
+```
+
+**Params:**
+```
+http://localhost:3000/user/5
+```
+
+Ikkalasi ham `5` raqamini yuboradi, lekin **params** yanada chiroyli va tushunarli! ✨
+
+---
+
+### Birinchi params API'miz
+
+```javascript
+import express from 'express';
+const app = express();
+const PORT = 3000;
+
+app.get('/user/:id', function(req, res) {
+  const id = req.params.id;  // URL dan ID ni olamiz
+  res.send(`Siz ${id}-raqamli foydalanuvchini so'radingiz`);
+});
+
+app.listen(PORT, function() {
+  console.log(`Server: http://localhost:${PORT}`);
+});
+```
+
+**Sinab ko'ring:**
+* `http://localhost:3000/user/1` → "Siz 1-raqamli foydalanuvchini so'radingiz"
+* `http://localhost:3000/user/42` → "Siz 42-raqamli foydalanuvchini so'radingiz"
+* `http://localhost:3000/user/999` → "Siz 999-raqamli foydalanuvchini so'radingiz"
+
+**E'tibor bering:** `:id` — bu o'zgaruvchi. Siz uni `:raqam`, `:user_id` yoki boshqa nom bilan ham yozishingiz mumkin.
+
+---
+
+### Real ma'lumot bilan ishlash
+
+Keling, kitoblar ro'yxatidan bitta kitobni ID bo'yicha oladigan API yarataylik:
+
+```javascript
+// Kitoblar ro'yxati
+const kitoblar = [
+  { id: 1, nomi: 'Alpomish', sahifa: 120, yil: 1980 },
+  { id: 2, nomi: 'Ufq', sahifa: 200, yil: 1974 },
+  { id: 3, nomi: 'Kecha va Kunduz', sahifa: 180, yil: 1936 },
+  { id: 4, nomi: 'O\'tkan kunlar', sahifa: 350, yil: 1925 }
+];
+
+// Barcha kitoblar
+app.get('/kitoblar', function(req, res) {
+  res.json(kitoblar);
+});
+
+// Bitta kitob (ID bo'yicha)
+app.get('/kitoblar/:id', function(req, res) {
+  const id = Number(req.params.id);  // ID ni raqamga aylantiramiz
+  
+  const kitob = kitoblar.find(function(k) {
+    return k.id === id;
+  });
+  
+  if (kitob) {
+    res.json(kitob);
+  } else {
+    res.status(404).json({ xato: 'Kitob topilmadi' });
+  }
+});
+```
+
+**Sinab ko'ring:**
+* `http://localhost:3000/kitoblar` → Barcha kitoblar
+* `http://localhost:3000/kitoblar/1` → Alpomish
+* `http://localhost:3000/kitoblar/3` → Kecha va Kunduz
+* `http://localhost:3000/kitoblar/999` → Xato: Kitob topilmadi
+
+---
+
+### Bir nechta params
+
+Bir vaqtda bir nechta params ishlatish mumkin:
+
+```javascript
+app.get('/sinf/:sinf_raqami/oquvchi/:id', function(req, res) {
+  const sinf = req.params.sinf_raqami;
+  const id = req.params.id;
+  
+  res.json({
+    sinf: sinf,
+    oquvchi_id: id,
+    xabar: `${sinf}-sinf, ${id}-raqamli o'quvchi`
+  });
+});
+```
+
+Test: `http://localhost:3000/sinf/7A/oquvchi/15`
 
 ---
 
 ### Query va Params farqi
 
-| Taqqoslash        | Query (req.query)              | Params (req.params)                      |
-| ----------------- | ------------------------------ | ---------------------------------------- |
-| Qayerda yoziladi? | URL oxirida `?kalit=qiymat`    | URL yo‘lining bir qismi sifatida         |
-| Odatda qachon?    | Filtrlash, qidirish, opsiyalar | Maxsus elementni chaqirish (ID yoki nom) |
-| Misol             | `/search?kitob=Alpomish`       | `/books/10`                              |
-| Ko‘rinishi        | `{ kitob: "Alpomish" }`        | `{ id: "10" }`                           |
+| Taqqoslash | Query | Params |
+|------------|-------|--------|
+| Ko'rinishi | `/search?q=Alpomish` | `/kitoblar/5` |
+| Majburiymi? | Yo'q (ixtiyoriy) | Ha (yo'l tarkibi) |
+| Qachon ishlatiladi? | Qidiruv, filtr, opsiyalar | Aniq element, ID |
+| Misol | YouTube qidiruv | Instagram profil |
 
-✅ Oddiy qoida: **Query** — qo‘shimcha, ixtiyoriy ma’lumot. **Params** — majburiy va yo‘lning o‘zi.
+**Oddiy qoida:**
+* **Params** → aniq biror narsani olish (`/user/5`, `/post/42`)
+* **Query** → qo'shimcha sozlamalar (`/search?q=...&limit=10`)
 
 ---
 
-### Mashq: `/hello/:name` route
+### Nodemon — Avtomatik restart
 
-Endi bolalar uchun sodda mashq qilamiz — foydalanuvchi URL’da o‘z ismini yozadi, server uni salomlaydi.
+Hozir biz kodni har safar o'zgartirganda serverni to'xtatib, qayta ishga tushirishimiz kerak. Bu noqulay! 😓
+
+**Nodemon** — serverni avtomatik qayta ishga tushiradigan dastur.
+
+### Nodemon o'rnatish
+
+```bash
+npm install --save-dev nodemon
+```
+
+✅ `--save-dev` — bu dasturni faqat development (dastur yozish) paytida ishlatamiz
+
+### package.json da sozlash
+
+`package.json` faylini oching va `"scripts"` qismiga qo'shing:
+
+```json
+{
+  "scripts": {
+    "start": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
+```
+
+### Ishga tushirish
+
+Endi odatdagi `node server.js` o'rniga:
+
+```bash
+npm start
+```
+
+✅ **Ajoyib!** Endi kodni saqlash bilan server avtomatik yangilanadi! 🎉
+
+**Terminalda ko'rishingiz mumkin:**
+```
+[nodemon] 2.0.20
+[nodemon] watching path(s): *.*
+[nodemon] watching extensions: js
+[nodemon] starting `node server.js`
+Server: http://localhost:3000
+```
+
+Kodni o'zgartirib saqlaganda:
+```
+[nodemon] restarting due to changes...
+[nodemon] starting `node server.js`
+Server: http://localhost:3000
+```
+
+---
+
+### 🎮 Amaliy mashqlar
+
+**Mashq 1:** Matematika jadvallar
 
 ```javascript
-app.get('/hello/:name', (req, res) => {
-  const ism = req.params.name;
-  res.send(`Hello, ${ism}!`);
+app.get('/jadval/:son', function(req, res) {
+  const son = Number(req.params.son);
+  const jadval = [];
+  
+  for (let i = 1; i <= 10; i++) {
+    jadval.push(`${son} x ${i} = ${son * i}`);
+  }
+  
+  res.json({
+    son: son,
+    jadval: jadval
+  });
 });
 ```
 
-Sinab ko‘ramiz:
+Test: `http://localhost:3000/jadval/7`
 
-* `http://localhost:3000/hello/Ali` → “Hello, Ali!”
-* `http://localhost:3000/hello/Lola` → “Hello, Lola!”
-
----
-
-### Mashq: `/hello` query bilan
-
-Agar query ishlatmoqchi bo‘lsak:
+**Mashq 2:** Sport komandalar
 
 ```javascript
-app.get('/hello', (req, res) => {
-  const ism = req.query.name || 'mehmon';
-  res.send(`Hello, ${ism}!`);
+const jamoalar = [
+  { id: 1, nomi: 'Real Madrid', mamlakat: 'Ispaniya', yil: 1902 },
+  { id: 2, nomi: 'Barcelona', mamlakat: 'Ispaniya', yil: 1899 },
+  { id: 3, nomi: 'Manchester United', mamlakat: 'Angliya', yil: 1878 }
+];
+
+app.get('/jamoa/:id', function(req, res) {
+  const id = Number(req.params.id);
+  const jamoa = jamoalar.find(function(j) {
+    return j.id === id;
+  });
+  
+  if (jamoa) {
+    res.json(jamoa);
+  } else {
+    res.json({ xato: 'Jamoa topilmadi' });
+  }
 });
 ```
 
-Sinash:
-
-* `http://localhost:3000/hello?name=Ali` → “Hello, Ali!”
-* `http://localhost:3000/hello` → “Hello, mehmon!”
-
----
-
-### Qo‘shimcha misollar
-
-**1. Foydalanuvchini params orqali tanlash**
+**Mashq 3:** Query va Params birga
 
 ```javascript
-app.get('/user/:id', (req, res) => {
+app.get('/jamoa/:id/oyinchilar', function(req, res) {
   const id = req.params.id;
+  const limit = req.query.limit || 10;  // ?limit=5
+  
   res.json({
-    id: id,
-    ism: 'Foydalanuvchi ' + id,
-    status: 'active'
+    jamoa_id: id,
+    oyinchilar_soni: limit,
+    xabar: `${id}-jamoa, ${limit} ta o'yinchi`
   });
 });
 ```
 
-`http://localhost:3000/user/25`
-→ `{ "id": "25", "ism": "Foydalanuvchi 25", "status": "active" }`
-
-**2. Qidiruv so‘zi bilan JSON qaytarish**
-
-```javascript
-app.get('/search', (req, res) => {
-  const so‘z = req.query.q || 'hech narsa yozilmadi';
-  res.json({
-    qidiruv: so‘z,
-    natija_soni: 0
-  });
-});
-```
-
-`http://localhost:3000/search?q=telefon` → `{ "qidiruv": "telefon", "natija_soni": 0 }`
+Test: `http://localhost:3000/jamoa/5/oyinchilar?limit=20`
 
 ---
 
-### Xulosa
+### Asosiy tushunchalar
 
-* `req.query` — URL’da `?kalit=qiymat` orqali kelgan ma’lumotni olish.
-* `req.params` — URL’ning o‘zida yozilgan qiymatni olish (`/user/5`).
-* Params aniq va majburiy, query qo‘shimcha va ixtiyoriy.
-* Har ikkisini birgalikda ishlatish mumkin.
+* **Params** — URL'ning o'zi ichidagi o'zgaruvchi (`/user/:id`)
+* **req.params** — params'larni olish
+* **`:id`** — params nomi (o'zingiz ixtiyoriy nom berishingiz mumkin)
+* **Nodemon** — kodni avtomatik qayta ishga tushiradi
+* **npm start** — nodemon bilan serverni ishga tushirish
+* **Params + Query** — ikkalasini birga ishlatish mumkin
+
+---
+
+### 🏆 Nima o'rgandik?
+
+✅ Route parametrlari (params) bilan ishlashni
+✅ Query va Params farqini
+✅ ID bo'yicha element olishni
+✅ Nodemon'ni o'rnatish va sozlashni
+✅ Avtomatik restart'ni yoqishni
+✅ Real ma'lumotlar bilan ishlashni
+
+**Keyingi hafta:** POST so'rovlar va ma'lumot yuborishni o'rganamiz! 🚀
 
 ---
 
@@ -1215,28 +1436,42 @@ app.get('/search', (req, res) => {
 <hr>
 
 
+
+
 <details>
-    <summary>POST so‘rovi va Body ma’lumotlari bilan ishlash</summary>
+    <summary>POST so'rovi va Body ma'lumotlari bilan ishlash</summary>
 
-## 🗓️ 3-hafta — 2-dars
+## 🗓️ 3-hafta — 1-dars
 
-### 🏷️ Mavzu: **POST so‘rovi va Body ma’lumotlari bilan ishlash**
+### 🏷️ Mavzu: **POST so'rovi va Body ma'lumotlari bilan ishlash**
+
+---
+
+### 🎯 Bu darsda nima o'rganamiz?
+
+* POST so'rovi nima
+* GET va POST farqi
+* Body orqali ma'lumot yuborish
+* express.json() middleware
+* Thunder Client bilan POST test qilish
 
 ---
 
 ### POST nima?
 
-Oldingi darsda biz **GET** so‘rovlarini ko‘rib chiqdik — foydalanuvchi serverdan ma’lumot so‘raydi.
-**POST** esa buning aksi: foydalanuvchi serverga yangi ma’lumot yuboradi.
+Avvalgi darslarda biz **GET** so'rovlarini ishlatdik — foydalanuvchi serverdan ma'lumot so'raydi.
+**POST** esa buning aksi: foydalanuvchi serverga yangi ma'lumot yuboradi.
 
-* **GET** — ma’lumot olish uchun.
-* **POST** — ma’lumot yuborish uchun.
+* **GET** — ma'lumot olish uchun 📥
+* **POST** — ma'lumot yuborish uchun 📤
 
-Misollar:
+**Real hayotdan misollar:**
 
 * Telegramda xabar yuborish → POST
 * Instagramda rasm yuklash → POST
-* Onlayn do‘konda yangi buyurtma qilish → POST
+* Onlayn do'konda yangi buyurtma qilish → POST
+* YouTube'ga comment yozish → POST
+* Gmail'da email yuborish → POST
 
 ---
 
@@ -1252,16 +1487,24 @@ Misollar:
 
 ### POST bilan JSON yuborish
 
-Foydalanuvchi serverga ma’lumot yuborayotganida uni **body** ichiga joylaydi.
-**Body** — bu so‘rovning ichidagi ma’lumotlar bo‘limi.
+Foydalanuvchi serverga ma'lumot yuborayotganida uni **body** ichiga joylaydi.
 
-Bizning server POST ma’lumotni tushunishi uchun Express’da maxsus sozlash kerak:
+**Body nima?**
+Body — bu so'rovning ichidagi ma'lumotlar bo'limi. Xuddi konvert ichidagi xat kabi!
+
+**Oddiy misol:**
+* GET so'rov — "Menga ma'lumot ber" degan bo'sh konvert 📭
+* POST so'rov — "Mana ma'lumot, saqlang" degan to'liq konvert 📬
+
+Bizning server POST ma'lumotni tushunishi uchun Express'da maxsus sozlash kerak:
 
 ```javascript
 app.use(express.json());
 ```
 
-Bu qator serverga kelayotgan JSON ma’lumotni o‘qib olish imkonini beradi.
+Bu qator serverga kelayotgan JSON ma'lumotni o'qib olish imkonini beradi.
+
+**Muhim:** Bu qatorni **app.post() dan oldin** yozish kerak!
 
 ---
 
@@ -1277,9 +1520,9 @@ const PORT = 3000;
 // JSON body ma’lumotni o‘qish uchun sozlash
 app.use(express.json());
 
-app.post('/feedback', (req, res) => {
-  const data = req.body; // foydalanuvchi yuborgan JSON ma’lumot
-  console.log(data);     // Terminalga ko‘ramiz
+app.post('/feedback', function(req, res) {
+  const data = req.body; // foydalanuvchi yuborgan JSON ma'lumot
+  console.log(data);     // Terminalga ko'ramiz
 
   res.json({
     status: 'success',
@@ -1287,7 +1530,7 @@ app.post('/feedback', (req, res) => {
   });
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, function() {
   console.log(`Server http://localhost:${PORT} da ishlayapti`);
 });
 ```
@@ -1337,7 +1580,7 @@ Terminalda esa quyidagiga o‘xshash chiqadi:
 Agar foydalanuvchi bo‘sh ma’lumot yuborsa, biz unga xatolik qaytaramiz.
 
 ```javascript
-app.post('/feedback', (req, res) => {
+app.post('/feedback', function(req, res) {
   const { message } = req.body;
 
   if (!message) {
@@ -1389,10 +1632,25 @@ Server foydalanuvchi nomi va izohini qaytarsin.
 
 ### Asosiy tushunchalar
 
-* **POST** — serverga yangi ma’lumot yuborish uchun ishlatiladi.
-* **Body** — POST so‘rovida keladigan ma’lumotlar bo‘limi.
-* **`express.json()`** — serverga JSON formatdagi ma’lumotni tushuntiradi.
-* **`req.body`** — foydalanuvchi yuborgan JSON’ni olish uchun ishlatiladi.
+* **POST** — serverga yangi ma'lumot yuborish uchun ishlatiladi.
+* **Body** — POST so'rovida keladigan ma'lumotlar bo'limi.
+* **`express.json()`** — serverga JSON formatdagi ma'lumotni tushuntiradi.
+* **`req.body`** — foydalanuvchi yuborgan JSON'ni olish uchun ishlatiladi.
+* **Validation** — kelgan ma'lumotni tekshirish (bo'sh yoki noto'g'ri emasligini)
+
+---
+
+### 🏆 Nima o'rgandik?
+
+✅ POST so'rovi nima ekanligini
+✅ GET va POST farqini
+✅ express.json() middleware'ini
+✅ req.body orqali ma'lumot olishni
+✅ Thunder Client bilan POST test qilishni
+✅ Validation (tekshirish) qo'shishni
+✅ Status kod 400 va 201 ishlatishni
+
+**Keyingi darsda:** Bu bilimlar bilan haqiqiy Todos API yaratamiz! 🚀
 
 ---
 </details>
@@ -1401,22 +1659,35 @@ Server foydalanuvchi nomi va izohini qaytarsin.
 
 
 <details>
-    <summary>Oddiy Todos API — xotirada ma’lumot saqlash (in-memory)</summary>
-## 🗓️ 3-hafta — 3-dars
+    <summary>Oddiy Todos API — xotirada ma'lumot saqlash (in-memory)</summary>
 
-### 🏷️ Mavzu: **Oddiy Todos API — xotirada ma’lumot saqlash (in-memory)**
+## 🗓️ 3-hafta — 2-dars
+
+### 🏷️ Mavzu: **Oddiy Todos API — xotirada ma'lumot saqlash (in-memory)**
+
+---
+
+### 🎯 Bu darsda nima o'rganamiz?
+
+* Array ichida ma'lumot saqlash
+* GET va POST'ni birgalikda ishlatish
+* Haqiqiy API yaratish
+* ID avtomatik berish
+* Status kodlar (200, 201, 400)
 
 ---
 
 ### Maqsad
 
-Oldingi darsda biz foydalanuvchi yuborgan ma’lumotni POST orqali qabul qila oldik.
-Bugun esa **haqiqiy kichkina API** yasaymiz. Bu API foydalanuvchi yuborgan vazifalarni (todo’larni) xotirada saqlaydi va GET orqali ularni ko‘rsatadi.
+Oldingi darsda biz foydalanuvchi yuborgan ma'lumotni POST orqali qabul qila oldik.
+Bugun esa **haqiqiy kichkina API** yasaymiz. Bu API foydalanuvchi yuborgan vazifalarni (todo'larni) xotirada saqlaydi va GET orqali ularni ko'rsatadi.
 
-> ⚡️ Bu darsdan keyin siz shunday serverga ega bo‘lasiz:
+> 🎯 Bu darsdan keyin siz shunday serverga ega bo'lasiz:
 >
-> * `POST /todos` — yangi vazifa qo‘shish
-> * `GET /todos` — barcha vazifalarni ko‘rish
+> * `POST /todos` — yangi vazifa qo'shish
+> * `GET /todos` — barcha vazifalarni ko'rish
+>
+> Xuddi YouTube'da videolar ro'yxati va yangi video yuklash kabi!
 
 ---
 
@@ -1445,13 +1716,13 @@ app.use(express.json());
 // TODO larni saqlash uchun bo‘sh array
 let todos = [];
 
-// Barcha TODO larni ko‘rsatish
-app.get('/todos', (req, res) => {
+// Barcha TODO larni ko'rsatish
+app.get('/todos', function(req, res) {
   res.json(todos);
 });
 
-// Yangi TODO qo‘shish
-app.post('/todos', (req, res) => {
+// Yangi TODO qo'shish
+app.post('/todos', function(req, res) {
   const { title } = req.body;
 
   if (!title) {
@@ -1475,7 +1746,7 @@ app.post('/todos', (req, res) => {
   });
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, function() {
   console.log(`Server ishga tushdi: http://localhost:${PORT}`);
 });
 ```
@@ -1556,14 +1827,20 @@ app.listen(PORT, () => {
 
 ---
 
-### Kengaytirish (qo‘shimcha)
+### 🌟 Kengaytirish: PATCH va DELETE
 
-Biz bajarilgan vazifalarni ko‘rsatish uchun `completed` qiymatini o‘zgartirish imkoniyatini qo‘shamiz:
+Endi API'mizni yanada kuchliroq qilamiz! Vazifalarni o'zgartirish va o'chirish imkoniyatini qo'shamiz.
+
+#### PATCH — Vazifani bajarilgan/bajarilmagan qilish
+
+Biz bajarilgan vazifalarni belgilash uchun `completed` qiymatini o'zgartirish imkoniyatini qo'shamiz:
 
 ```javascript
-app.patch('/todos/:id', (req, res) => {
+app.patch('/todos/:id', function(req, res) {
   const { id } = req.params;
-  const todo = todos.find(t => t.id === parseInt(id));
+  const todo = todos.find(function(t) {
+    return t.id === parseInt(id);
+  });
 
   if (!todo) {
     return res.status(404).json({ message: 'Todo topilmadi' });
@@ -1581,16 +1858,67 @@ Har safar chaqirsak `completed` qiymati o‘zgaradi.
 
 ---
 
-### Qo‘shimcha mashqlar
+#### DELETE — Vazifani o'chirish
 
-1. `/clear` degan route yarating, u barcha vazifalarni o‘chirib yuborsin.
-2. `/count` degan route yarating, u nechta vazifa borligini qaytarsin.
-
-Misol:
+Vazifani butunlay o'chirib tashlash uchun:
 
 ```javascript
-app.get('/count', (req, res) => {
-  res.json({ total: todos.length });
+app.delete('/todos/:id', function(req, res) {
+  const { id } = req.params;
+  const index = todos.findIndex(function(t) {
+    return t.id === parseInt(id);
+  });
+  
+  if (index === -1) {
+    return res.status(404).json({ xato: 'Todo topilmadi' });
+  }
+  
+  const ochirilgan = todos.splice(index, 1)[0];
+  res.json({ 
+    xabar: 'Todo o\'chirildi', 
+    todo: ochirilgan 
+  });
+});
+```
+
+Thunder Client'da sinab ko'ring:
+* Method: **DELETE**
+* URL: `http://localhost:3000/todos/1`
+
+---
+
+### 🎮 Qo'shimcha mashqlar
+
+**Mashq 1:** `/count` — Vazifalar sonini ko'rsatish
+
+```javascript
+app.get('/count', function(req, res) {
+  res.json({ 
+    jami: todos.length,
+    bajarilgan: todos.filter(function(t) { return t.completed; }).length,
+    bajarilmagan: todos.filter(function(t) { return !t.completed; }).length
+  });
+});
+```
+
+**Mashq 2:** `/clear` — Barcha vazifalarni tozalash
+
+```javascript
+app.post('/clear', function(req, res) {
+  const soni = todos.length;
+  todos = [];
+  res.json({ xabar: `${soni} ta vazifa o'chirildi` });
+});
+```
+
+**Mashq 3:** `/completed` — Faqat bajarilgan vazifalar
+
+```javascript
+app.get('/completed', function(req, res) {
+  const bajarilganlar = todos.filter(function(t) {
+    return t.completed === true;
+  });
+  res.json(bajarilganlar);
 });
 ```
 
@@ -1598,11 +1926,26 @@ app.get('/count', (req, res) => {
 
 ### Asosiy tushunchalar
 
-* **In-memory** — ma’lumot server xotirasida saqlanadi (o‘chsa yo‘qoladi).
-* **GET** — saqlangan ma’lumotni olish.
-* **POST** — yangi ma’lumot qo‘shish.
+* **In-memory** — ma'lumot server xotirasida saqlanadi (o'chsa yo'qoladi).
+* **GET** — saqlangan ma'lumotni olish.
+* **POST** — yangi ma'lumot qo'shish.
+* **PATCH** — mavjud ma'lumotni o'zgartirish.
+* **DELETE** — ma'lumotni o'chirish.
 * **Array** — bir nechta obyektlarni tartibli saqlash uchun.
 * **Status kodlar** — 200 (OK), 201 (yaratildi), 400 (xato), 404 (topilmadi).
+
+---
+
+### 🏆 Nima o'rgandik?
+
+✅ Haqiqiy API yaratishni (GET + POST)
+✅ Array'da ma'lumot saqlashni
+✅ PATCH va DELETE operatsiyalarini
+✅ ID avtomatik berishni
+✅ Xatolarni to'g'ri qaytarishni
+✅ CRUD amaliyotlarini
+
+**Keyingi hafta:** Ma'lumotni xotirada emas, faylda saqlashni o'rganamiz — server o'chsa ham ma'lumot saqlanadi! 💾
 
 ---
 
@@ -1611,10 +1954,21 @@ app.get('/count', (req, res) => {
 <hr>
 
 <details>
-    <summary>Ma’lumotni xotirada emas, faylda saqlash (Database va Memory tushunchasi)</summary>
+    <summary>Ma'lumotni xotirada emas, faylda saqlash (Database va Memory tushunchasi)</summary>
+
 ## 🗓️ 4-hafta — 1-dars
 
-### 🏷️ Mavzu: **Ma’lumotni xotirada emas, faylda saqlash (Database va Memory tushunchasi)**
+### 🏷️ Mavzu: **Ma'lumotni xotirada emas, faylda saqlash (Database va Memory tushunchasi)**
+
+---
+
+### 🎯 Bu darsda nima o'rganamiz?
+
+* Memory (xotira) nima va uning muammolari
+* Database (ma'lumotlar bazasi) nima
+* Nega ma'lumotni faylda saqlash kerak
+* lowdb kutubxonasi bilan tanishuv
+* JSON faylda ma'lumot saqlash
 
 ---
 
@@ -1777,10 +2131,24 @@ console.log('Saqlangan ma’lumotlar:', db.data.todos)
 
 ### Asosiy tushunchalar
 
-* **Memory** — vaqtinchalik xotira, server to‘xtasa ma’lumot yo‘qoladi.
-* **Database** — ma’lumotni doimiy saqlash joyi.
-* **JSON fayl** — oddiy ko‘rinishdagi kichik database.
+* **Memory** — vaqtinchalik xotira, server to'xtasa ma'lumot yo'qoladi.
+* **Database** — ma'lumotni doimiy saqlash joyi.
+* **JSON fayl** — oddiy ko'rinishdagi kichik database.
 * **lowdb** — JSON faylni database sifatida ishlatish uchun juda oddiy va qulay kutubxona.
+* **Persistence** — ma'lumotning doimiy saqlanishi
+
+---
+
+### 🏆 Nima o'rgandik?
+
+✅ Memory va Database farqini
+✅ Nega ma'lumotni saqlash kerakligini
+✅ lowdb kutubxonasi nima ekanligini
+✅ JSON faylga ma'lumot yozish va o'qishni
+✅ await db.read() va await db.write()
+✅ Ma'lumot yo'qolmasligi uchun yechim
+
+**Keyingi darsda:** Todos API'ni lowdb bilan to'liq ishlaydigan qilamiz! 💾
 
 ---
 </details>
@@ -1788,16 +2156,29 @@ console.log('Saqlangan ma’lumotlar:', db.data.todos)
 <hr>
 
 <details>
-    <summary>lowdb bilan oddiy ma’lumotlar bazasini sozlash va Todos API’ni saqlash</summary>
+    <summary>lowdb bilan oddiy ma'lumotlar bazasini sozlash va Todos API'ni saqlash</summary>
+
 ## 🗓️ 4-hafta — 2-dars
 
-### 🏷️ Mavzu: **lowdb bilan oddiy ma’lumotlar bazasini sozlash va Todos API’ni saqlash**
+### 🏷️ Mavzu: **lowdb bilan oddiy ma'lumotlar bazasini sozlash va Todos API'ni saqlash**
+
+---
+
+### 🎯 Bu darsda nima o'rganamiz?
+
+* lowdb'ni loyihaga ulash
+* db.json fayl yaratish
+* API'ni lowdb bilan ishlashga o'zgartirish
+* await db.read() va await db.write()
+* Doimiy saqlash (persistence)
 
 ---
 
 ### lowdb bilan ishlashni boshlash
 
-Oldingi darsda biz **memory** va **database** farqini o‘rgandik va lowdb kutubxonasini ko‘rdik. Bugun esa bizning **Todos API**’mizni to‘liq **db.json** fayliga ulaymiz. Endi ma’lumotlar server o‘chsa ham saqlanib qoladi.
+Oldingi darsda biz **memory** va **database** farqini o'rgandik va lowdb kutubxonasini ko'rdik. Bugun esa bizning **Todos API**'mizni to'liq **db.json** fayliga ulaymiz. 
+
+> 🎉 Eng katta o'zgarish: Endi ma'lumotlar server o'chsa ham saqlanib qoladi!
 
 ---
 
@@ -1860,7 +2241,7 @@ db.data ||= { todos: [] }
 ### 4️⃣ GET /todos — ma’lumotni o‘qish
 
 ```javascript
-app.get('/todos', (req, res) => {
+app.get('/todos', function(req, res) {
   res.json(db.data.todos)
 })
 ```
@@ -1872,7 +2253,7 @@ Bu orqali biz fayldagi barcha todos ro‘yxatini qaytarib beramiz.
 ### 5️⃣ POST /todos — yangi todo qo‘shish
 
 ```javascript
-app.post('/todos', async (req, res) => {
+app.post('/todos', async function(req, res) {
   const { title } = req.body
 
   if (!title) {
@@ -1885,7 +2266,7 @@ app.post('/todos', async (req, res) => {
     completed: false
   }
 
-  db.data.todos.push(newTodo)  // ro‘yxatga qo‘shamiz
+  db.data.todos.push(newTodo)  // ro'yxatga qo'shamiz
   await db.write()             // faylga yozamiz
 
   res.status(201).json({ status: 'success', todo: newTodo })
@@ -2003,9 +2384,11 @@ Bu yaxshi odat — foydalanuvchi noto‘g‘ri ma’lumot yuborishi mumkin.
 Masalan:
 
 ```javascript
-app.patch('/todos/:id', async (req, res) => {
+app.patch('/todos/:id', async function(req, res) {
   const { id } = req.params
-  const todo = db.data.todos.find(t => t.id === parseInt(id))
+  const todo = db.data.todos.find(function(t) {
+    return t.id === parseInt(id)
+  })
 
   if (!todo) return res.status(404).json({ message: 'Todo topilmadi' })
 
@@ -2021,10 +2404,24 @@ app.patch('/todos/:id', async (req, res) => {
 ### Asosiy tushunchalar
 
 * **lowdb** — JSON faylni oddiy database sifatida ishlatadi.
-* **await db.read()** — fayldan ma’lumotni o‘qiydi.
-* **await db.write()** — ma’lumotni faylga yozadi.
-* **GET /todos** — ma’lumotlarni olish.
-* **POST /todos** — yangi ma’lumot qo‘shish va saqlash.
+* **await db.read()** — fayldan ma'lumotni o'qiydi.
+* **await db.write()** — ma'lumotni faylga yozadi.
+* **GET /todos** — ma'lumotlarni olish.
+* **POST /todos** — yangi ma'lumot qo'shish va saqlash.
+* **db.data** — fayldagi ma'lumotlarga murojaat qilish
+
+---
+
+### 🏆 Nima o'rgandik?
+
+✅ lowdb'ni Express bilan birlashtirishni
+✅ db.json faylini yaratish va sozlashni
+✅ await db.read() va db.write() ishlatishni
+✅ API'ni lowdb bilan ishlashga o'zgartirishni
+✅ Ma'lumotni doimiy saqlashni
+✅ Server o'chib-yonganida ham ma'lumot saqlanishini
+
+**Keyingi darsda:** To'liq CRUD (DELETE va PUT/PATCH) qo'shamiz! 🎯
 
 ---
 </details>
@@ -2033,17 +2430,38 @@ app.patch('/todos/:id', async (req, res) => {
 
 
 <details>
-    <summary>CRUD to‘liq: DELETE va PUT/PATCH bilan yakunlash (lowdb)</summary>
+    <summary>CRUD to'liq: DELETE va PUT/PATCH bilan yakunlash (lowdb)</summary>
+
 ## 🗓️ 4-hafta — 3-dars
 
-### 🏷️ Mavzu: **CRUD to‘liq: DELETE va PUT/PATCH bilan yakunlash (lowdb)**
+### 🏷️ Mavzu: **CRUD to'liq: DELETE va PUT/PATCH bilan yakunlash (lowdb)**
 
 ---
 
-Bu darsda “Todos API”ni to‘liq **CRUD** (Create, Read, Update, Delete) holatiga keltiramiz:
+### 🎯 Bu darsda nima o'rganamiz?
 
-* **DELETE `/todos/:id`** — todo’ni o‘chirish
-* **PUT/PATCH `/todos/:id`** — todo’ni yangilash (masalan, `completed`ni belgilash)
+* DELETE operatsiyasi (o'chirish)
+* PATCH operatsiyasi (qisman yangilash)
+* PUT operatsiyasi (to'liq yangilash)
+* To'liq CRUD API yaratish
+* Thunder Client bilan test qilish
+
+---
+
+### CRUD nima?
+
+**CRUD** — bu har bir API'da bo'lishi kerak bo'lgan 4 ta asosiy operatsiya:
+
+* **C**reate — yaratish (POST)
+* **R**ead — o'qish (GET)
+* **U**pdate — yangilash (PUT/PATCH)
+* **D**elete — o'chirish (DELETE)
+
+Bu darsda Todos API'miz to'liq **CRUD** holatiga keladi:
+
+* **DELETE `/todos/:id`** — todo'ni o'chirish
+* **PATCH `/todos/:id`** — todo'ni qisman yangilash (masalan, `completed`ni belgilash)
+* **PUT `/todos/:id`** — todo'ni to'liq yangilash
 
 > Quyidagi kodlar oldingi darsdagi **ESM** (import) uslubiga mos: `package.json` ichida `"type": "module"` bor deb hisoblaymiz.
 
@@ -2068,20 +2486,20 @@ const db = new Low(adapter, { todos: [] })
 await db.read()
 db.data ||= { todos: [] }   // agar bo‘sh bo‘lsa, default
 
-// READ: Barcha todo’lar
-app.get('/todos', (req, res) => {
+// READ: Barcha todo'lar
+app.get('/todos', function(req, res) {
   res.json(db.data.todos)
 })
 
 // CREATE: Yangi todo
-app.post('/todos', async (req, res) => {
+app.post('/todos', async function(req, res) {
   const { title } = req.body
   if (!title) {
     return res.status(400).json({ status: 'error', message: 'Todo nomi kerak!' })
   }
 
   const newTodo = {
-    id: db.data.todos.length ? Math.max(...db.data.todos.map(t => t.id)) + 1 : 1,
+    id: db.data.todos.length ? Math.max(...db.data.todos.map(function(t) { return t.id })) + 1 : 1,
     title,
     completed: false
   }
@@ -2102,16 +2520,18 @@ app.post('/todos', async (req, res) => {
 **Maqsad:** berilgan `id` bo‘yicha todo’ni topish, topilsa massivdan olib tashlash, bazaga yozish.
 
 ```javascript
-// DELETE: Todo o‘chirish
-app.delete('/todos/:id', async (req, res) => {
+// DELETE: Todo o'chirish
+app.delete('/todos/:id', async function(req, res) {
   const id = Number(req.params.id)
 
-  // noto‘g‘ri id yuborilsa
+  // noto'g'ri id yuborilsa
   if (Number.isNaN(id)) {
-    return res.status(400).json({ status: 'error', message: 'Noto‘g‘ri ID' })
+    return res.status(400).json({ status: 'error', message: 'Noto'g'ri ID' })
   }
 
-  const index = db.data.todos.findIndex(t => t.id === id)
+  const index = db.data.todos.findIndex(function(t) {
+    return t.id === id
+  })
 
   if (index === -1) {
     return res.status(404).json({ status: 'error', message: 'Todo topilmadi' })
@@ -2143,13 +2563,15 @@ app.delete('/todos/:id', async (req, res) => {
 
 ```javascript
 // PATCH: completed ni teskari qilish (true <-> false)
-app.patch('/todos/:id', async (req, res) => {
+app.patch('/todos/:id', async function(req, res) {
   const id = Number(req.params.id)
   if (Number.isNaN(id)) {
-    return res.status(400).json({ status: 'error', message: 'Noto‘g‘ri ID' })
+    return res.status(400).json({ status: 'error', message: 'Noto'g'ri ID' })
   }
 
-  const todo = db.data.todos.find(t => t.id === id)
+  const todo = db.data.todos.find(function(t) {
+    return t.id === id
+  })
   if (!todo) {
     return res.status(404).json({ status: 'error', message: 'Todo topilmadi' })
   }
@@ -2164,19 +2586,21 @@ app.patch('/todos/:id', async (req, res) => {
 #### Variant B — `completed` ni **aniq qiymat**ga o‘rnatish:
 
 ```javascript
-// PATCH: completed ni aniq qiymatga o‘rnatish (body: { completed: true/false })
-app.patch('/todos/:id/complete', async (req, res) => {
+// PATCH: completed ni aniq qiymatga o'rnatish (body: { completed: true/false })
+app.patch('/todos/:id/complete', async function(req, res) {
   const id = Number(req.params.id)
   const { completed } = req.body
 
   if (Number.isNaN(id)) {
-    return res.status(400).json({ status: 'error', message: 'Noto‘g‘ri ID' })
+    return res.status(400).json({ status: 'error', message: 'Noto'g'ri ID' })
   }
   if (typeof completed !== 'boolean') {
-    return res.status(400).json({ status: 'error', message: 'completed true/false bo‘lishi kerak' })
+    return res.status(400).json({ status: 'error', message: 'completed true/false bo'lishi kerak' })
   }
 
-  const todo = db.data.todos.find(t => t.id === id)
+  const todo = db.data.todos.find(function(t) {
+    return t.id === id
+  })
   if (!todo) {
     return res.status(404).json({ status: 'error', message: 'Todo topilmadi' })
   }
@@ -2195,22 +2619,24 @@ app.patch('/todos/:id/complete', async (req, res) => {
 **PUT** odatda obyektni **to‘liq** almashtirish uchun ishlatiladi (majburiy maydonlarni qayta yuborasiz).
 
 ```javascript
-// PUT: to‘liq yangilash (title va completed talab qilinadi)
-app.put('/todos/:id', async (req, res) => {
+// PUT: to'liq yangilash (title va completed talab qilinadi)
+app.put('/todos/:id', async function(req, res) {
   const id = Number(req.params.id)
   const { title, completed } = req.body
 
   if (Number.isNaN(id)) {
-    return res.status(400).json({ status: 'error', message: 'Noto‘g‘ri ID' })
+    return res.status(400).json({ status: 'error', message: 'Noto'g'ri ID' })
   }
   if (typeof title !== 'string' || !title.trim()) {
     return res.status(400).json({ status: 'error', message: 'title talab qilinadi' })
   }
   if (typeof completed !== 'boolean') {
-    return res.status(400).json({ status: 'error', message: 'completed true/false bo‘lishi kerak' })
+    return res.status(400).json({ status: 'error', message: 'completed true/false bo'lishi kerak' })
   }
 
-  const index = db.data.todos.findIndex(t => t.id === id)
+  const index = db.data.todos.findIndex(function(t) {
+    return t.id === id
+  })
   if (index === -1) {
     return res.status(404).json({ status: 'error', message: 'Todo topilmadi' })
   }
@@ -2228,7 +2654,7 @@ app.put('/todos/:id', async (req, res) => {
 ### 5) Serverni ishga tushirish
 
 ```javascript
-app.listen(PORT, () => {
+app.listen(PORT, function() {
   console.log(`Server: http://localhost:${PORT}`)
 })
 ```
@@ -2291,12 +2717,46 @@ Keyin **GET `/todos`** bilan ro‘yxatdan yo‘qolganini tekshiring.
 
 ### Yakuniy holat
 
-Endi sizning “Todos API”ngiz to‘liq **CRUD** funksiyalariga ega:
+Endi sizning "Todos API"ngiz to'liq **CRUD** funksiyalariga ega:
 
-* **POST** `/todos` — yaratish
-* **GET** `/todos` — o‘qish
-* **PATCH/PUT** `/todos/:id` — yangilash
-* **DELETE** `/todos/:id` — o‘chirish
+* **POST** `/todos` — yaratish (Create)
+* **GET** `/todos` — o'qish (Read)
+* **PATCH/PUT** `/todos/:id` — yangilash (Update)
+* **DELETE** `/todos/:id` — o'chirish (Delete)
+
+---
+
+### 🏆 Nima o'rgandik?
+
+✅ To'liq CRUD operatsiyalarini
+✅ DELETE so'rovi bilan ishlashni
+✅ PATCH va PUT farqini
+✅ Ma'lumotni faylda saqlashni
+✅ Haqiqiy API yaratishni
+✅ lowdb bilan professional ishlashni
+
+**Keyingi darsda (Darslik_2.md):** Haqiqiy ma'lumotlar bazasi (SQLite) bilan ishlashni o'rganamiz! 🚀
+
+---
+
+### 💡 Siz allaqachon bilib olgansiz:
+
+1. ✅ Internet va Backend qanday ishlashini
+2. ✅ Node.js va npm bilan ishlashni
+3. ✅ Express bilan server yaratishni
+4. ✅ Routes (yo'llar) yaratishni
+5. ✅ Query va Params bilan ishlashni
+6. ✅ JSON formatida ma'lumot yuborishni
+7. ✅ Thunder Client bilan test qilishni
+8. ✅ POST orqali ma'lumot qabul qilishni
+9. ✅ In-memory ma'lumot saqlashni
+10. ✅ To'liq CRUD API yaratishni
+11. ✅ lowdb bilan faylga ma'lumot yozishni
+12. ✅ Doimiy ma'lumot saqlanishini (persistence)
+
+**Siz endi haqiqiy backend dasturchi sifatida ishlashingiz mumkin!** 🎉👏
+
+---
 
 </details>
 
