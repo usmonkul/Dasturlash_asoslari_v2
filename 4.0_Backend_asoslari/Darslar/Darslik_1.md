@@ -1671,6 +1671,7 @@ Server foydalanuvchi nomi va izohini qaytarsin.
 
 * Array ichida ma'lumot saqlash
 * GET va POST'ni birgalikda ishlatish
+* HTML forma bilan ma'lumot yuborish
 * Haqiqiy API yaratish
 * ID avtomatik berish
 * Status kodlar (200, 201, 400)
@@ -1686,6 +1687,7 @@ Bugun esa **haqiqiy kichkina API** yasaymiz. Bu API foydalanuvchi yuborgan vazif
 >
 > * `POST /todos` — yangi vazifa qo'shish
 > * `GET /todos` — barcha vazifalarni ko'rish
+> * HTML forma bilan vazifa qo'shish
 >
 > Xuddi YouTube'da videolar ro'yxati va yangi video yuklash kabi!
 
@@ -1693,15 +1695,15 @@ Bugun esa **haqiqiy kichkina API** yasaymiz. Bu API foydalanuvchi yuborgan vazif
 
 ### Xotira (Memory) nima?
 
-Hozircha biz ma’lumotni fayl yoki bazaga yozmaymiz.
-**In-memory** degani — ma’lumot server ishayotgan vaqtida kompyuter xotirasida saqlanadi.
-Server o‘chsa yoki qayta ishga tushsa, ma’lumot yo‘qoladi.
+Hozircha biz ma'lumotni fayl yoki bazaga yozmaymiz.
+**In-memory** degani — ma'lumot server ishayotgan vaqtida kompyuter xotirasida saqlanadi.
+Server o'chsa yoki qayta ishga tushsa, ma'lumot yo'qoladi.
 
-Bu o‘quv bosqichida oddiy va tushunarli.
+Bu o'quv bosqichida oddiy va tushunarli.
 
 ---
 
-### Boshlang‘ich kod
+### Boshlang'ich kod
 
 `server.js` faylimizni yangilaymiz:
 
@@ -1710,11 +1712,12 @@ import express from 'express';
 const app = express();
 const PORT = 3000;
 
-// JSON body o‘qish
+// JSON body o'qish
 app.use(express.json());
 
-// TODO larni saqlash uchun bo‘sh array
+// TODO larni saqlash uchun bo'sh array
 let todos = [];
+let nextId = 1;  // Keyingi ID uchun o'zgaruvchi
 
 // Barcha TODO larni ko'rsatish
 app.get('/todos', function(req, res) {
@@ -1733,12 +1736,13 @@ app.post('/todos', function(req, res) {
   }
 
   const newTodo = {
-    id: todos.length + 1,
+    id: nextId,
     title: title,
     completed: false
   };
 
   todos.push(newTodo);
+  nextId = nextId + 1;  // Keyingi ID uchun oshiramiz
 
   res.status(201).json({
     status: 'success',
@@ -1755,17 +1759,19 @@ app.listen(PORT, function() {
 
 ### Kodni tushuntirish
 
-* `let todos = []` — vazifalar ro‘yxati saqlanadigan bo‘sh array.
+* `let todos = []` — vazifalar ro'yxati saqlanadigan bo'sh array.
+* `let nextId = 1` — har bir yangi vazifaga beradigan ID raqami.
 * `app.get('/todos')` — barcha vazifalarni JSON qilib qaytaradi.
-* `app.post('/todos')` — yangi vazifa qabul qiladi va ro‘yxatga qo‘shadi.
-* `id` — har bir vazifaga tartib raqami beramiz (length + 1).
-* `completed` — vazifa bajarilgan yoki yo‘qligini bilish uchun.
+* `app.post('/todos')` — yangi vazifa qabul qiladi va ro'yxatga qo'shadi.
+* `id: nextId` — har bir vazifaga tartib raqami beramiz.
+* `nextId = nextId + 1` — keyingi vazifa uchun ID'ni 1 ga oshiramiz.
+* `completed` — vazifa bajarilgan yoki yo'qligini bilish uchun.
 
 ---
 
 ### Thunder Client bilan sinash
 
-#### 1. Yangi vazifa qo‘shish
+#### 1. Yangi vazifa qo'shish
 
 * Method: POST
 * URL: `http://localhost:3000/todos`
@@ -1790,11 +1796,11 @@ app.listen(PORT, function() {
 }
 ```
 
-#### 2. Yana bir vazifa qo‘shamiz
+#### 2. Yana bir vazifa qo'shamiz
 
 ```json
 {
-  "title": "Kitob o‘qish"
+  "title": "Kitob o'qish"
 }
 ```
 
@@ -1805,13 +1811,13 @@ app.listen(PORT, function() {
   "status": "success",
   "todo": {
     "id": 2,
-    "title": "Kitob o‘qish",
+    "title": "Kitob o'qish",
     "completed": false
   }
 }
 ```
 
-#### 3. Barcha vazifalarni ko‘rish
+#### 3. Barcha vazifalarni ko'rish
 
 * Method: GET
 * URL: `http://localhost:3000/todos`
@@ -1821,59 +1827,242 @@ app.listen(PORT, function() {
 ```json
 [
   { "id": 1, "title": "Uy vazifasini qilish", "completed": false },
-  { "id": 2, "title": "Kitob o‘qish", "completed": false }
+  { "id": 2, "title": "Kitob o'qish", "completed": false }
 ]
 ```
 
 ---
 
-### 🌟 Kengaytirish: PATCH va DELETE
+### 🌐 HTML Forma bilan ma'lumot yuborish
+
+Endi HTML sahifa yaratib, forma orqali vazifa qo'shishni ko'ramiz.
+
+**1-qadam:** HTML fayl yarating (`public/index.html`):
+
+```html
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vazifalar Ro'yxati</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    h1 {
+      color: #333;
+      text-align: center;
+    }
+    .form-container {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    input[type="text"] {
+      width: 70%;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    #todoList {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+    }
+    .todo-item {
+      padding: 10px;
+      margin: 5px 0;
+      background: #f9f9f9;
+      border-left: 4px solid #4CAF50;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <h1>📝 Mening Vazifalarim</h1>
+  
+  <div class="form-container">
+    <h3>Yangi vazifa qo'shish</h3>
+    <form id="todoForm">
+      <input 
+        type="text" 
+        id="todoInput" 
+        placeholder="Vazifani kiriting..."
+        required
+      >
+      <button type="submit">Qo'shish</button>
+    </form>
+  </div>
+
+  <div id="todoList">
+    <h3>Vazifalar ro'yxati:</h3>
+    <div id="todos"></div>
+  </div>
+
+  <script>
+    const form = document.getElementById('todoForm');
+    const input = document.getElementById('todoInput');
+    const todosDiv = document.getElementById('todos');
+
+    // Barcha vazifalarni yuklash
+    function loadTodos() {
+      fetch('http://localhost:3000/todos')
+        .then(function(response) {
+          return response.json();
+        })
+        .then(function(todos) {
+          todosDiv.innerHTML = '';
+          
+          // Har bir vazifani ko'rsatish (oddiy for loop)
+          for (let i = 0; i < todos.length; i++) {
+            const todo = todos[i];
+            const div = document.createElement('div');
+            div.className = 'todo-item';
+            div.textContent = todo.id + '. ' + todo.title;
+            todosDiv.appendChild(div);
+          }
+        })
+        .catch(function(error) {
+          console.log('Xato:', error);
+        });
+    }
+
+    // Forma yuborilganda
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();  // Sahifani yangilanishini to'xtatish
+      
+      const title = input.value;
+      
+      // Serverga POST so'rov yuborish
+      fetch('http://localhost:3000/todos', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ title: title })
+      })
+      .then(function(response) {
+        return response.json();
+      })
+      .then(function(data) {
+        console.log('Muvaffaqiyat:', data);
+        input.value = '';  // Inputni tozalash
+        loadTodos();  // Ro'yxatni yangilash
+      })
+      .catch(function(error) {
+        console.log('Xato:', error);
+      });
+    });
+
+    // Sahifa yuklanganida vazifalarni ko'rsatish
+    loadTodos();
+  </script>
+</body>
+</html>
+```
+
+**2-qadam:** Server.js ga static fayl xizmati qo'shish:
+
+```javascript
+import express from 'express';
+const app = express();
+const PORT = 3000;
+
+// JSON body o'qish
+app.use(express.json());
+
+// Static fayllar uchun (HTML, CSS, JS)
+app.use(express.static('public'));
+
+// ... qolgan kod ...
+```
+
+**3-qadam:** `public` papkasini yarating va `index.html` ni ichiga qo'ying.
+
+**4-qadam:** Brauzerda oching: `http://localhost:3000/index.html`
+
+---
+
+### 🌟 Kengaytirish: PATCH va DELETE (oddiy usul)
 
 Endi API'mizni yanada kuchliroq qilamiz! Vazifalarni o'zgartirish va o'chirish imkoniyatini qo'shamiz.
 
 #### PATCH — Vazifani bajarilgan/bajarilmagan qilish
 
-Biz bajarilgan vazifalarni belgilash uchun `completed` qiymatini o'zgartirish imkoniyatini qo'shamiz:
-
 ```javascript
 app.patch('/todos/:id', function(req, res) {
-  const { id } = req.params;
-  const todo = todos.find(function(t) {
-    return t.id === parseInt(id);
-  });
+  const id = parseInt(req.params.id);
+  let foundTodo = null;
+  
+  // Oddiy for loop bilan todo topish
+  for (let i = 0; i < todos.length; i++) {
+    if (todos[i].id === id) {
+      foundTodo = todos[i];
+      break;
+    }
+  }
 
-  if (!todo) {
+  if (!foundTodo) {
     return res.status(404).json({ message: 'Todo topilmadi' });
   }
 
-  todo.completed = !todo.completed;
-  res.json({ status: 'success', todo });
+  foundTodo.completed = !foundTodo.completed;
+  res.json({ status: 'success', todo: foundTodo });
 });
 ```
 
-* URL: `http://localhost:3000/todos/1`
-* Method: PATCH
-
-Har safar chaqirsak `completed` qiymati o‘zgaradi.
-
 ---
 
-#### DELETE — Vazifani o'chirish
-
-Vazifani butunlay o'chirib tashlash uchun:
+#### DELETE — Vazifani o'chirish (oddiy usul)
 
 ```javascript
 app.delete('/todos/:id', function(req, res) {
-  const { id } = req.params;
-  const index = todos.findIndex(function(t) {
-    return t.id === parseInt(id);
-  });
+  const id = parseInt(req.params.id);
+  let foundIndex = -1;
   
-  if (index === -1) {
+  // Oddiy for loop bilan index topish
+  for (let i = 0; i < todos.length; i++) {
+    if (todos[i].id === id) {
+      foundIndex = i;
+      break;
+    }
+  }
+  
+  if (foundIndex === -1) {
     return res.status(404).json({ xato: 'Todo topilmadi' });
   }
   
-  const ochirilgan = todos.splice(index, 1)[0];
+  // Array dan element o'chirish (oddiy usul)
+  const ochirilgan = todos[foundIndex];
+  const yangiTodos = [];
+  
+  for (let i = 0; i < todos.length; i++) {
+    if (i !== foundIndex) {
+      yangiTodos.push(todos[i]);
+    }
+  }
+  
+  todos = yangiTodos;
+  
   res.json({ 
     xabar: 'Todo o\'chirildi', 
     todo: ochirilgan 
@@ -1881,22 +2070,29 @@ app.delete('/todos/:id', function(req, res) {
 });
 ```
 
-Thunder Client'da sinab ko'ring:
-* Method: **DELETE**
-* URL: `http://localhost:3000/todos/1`
-
 ---
 
-### 🎮 Qo'shimcha mashqlar
+### 🎮 Qo'shimcha mashqlar (oddiy usul bilan)
 
 **Mashq 1:** `/count` — Vazifalar sonini ko'rsatish
 
 ```javascript
 app.get('/count', function(req, res) {
+  let bajarilganSoni = 0;
+  let bajarilmaganSoni = 0;
+  
+  for (let i = 0; i < todos.length; i++) {
+    if (todos[i].completed) {
+      bajarilganSoni = bajarilganSoni + 1;
+    } else {
+      bajarilmaganSoni = bajarilmaganSoni + 1;
+    }
+  }
+  
   res.json({ 
     jami: todos.length,
-    bajarilgan: todos.filter(function(t) { return t.completed; }).length,
-    bajarilmagan: todos.filter(function(t) { return !t.completed; }).length
+    bajarilgan: bajarilganSoni,
+    bajarilmagan: bajarilmaganSoni
   });
 });
 ```
@@ -1907,7 +2103,8 @@ app.get('/count', function(req, res) {
 app.post('/clear', function(req, res) {
   const soni = todos.length;
   todos = [];
-  res.json({ xabar: `${soni} ta vazifa o'chirildi` });
+  nextId = 1;  // ID ni ham qaytadan 1 dan boshlaymiz
+  res.json({ xabar: soni + ' ta vazifa o\'chirildi' });
 });
 ```
 
@@ -1915,9 +2112,14 @@ app.post('/clear', function(req, res) {
 
 ```javascript
 app.get('/completed', function(req, res) {
-  const bajarilganlar = todos.filter(function(t) {
-    return t.completed === true;
-  });
+  const bajarilganlar = [];
+  
+  for (let i = 0; i < todos.length; i++) {
+    if (todos[i].completed === true) {
+      bajarilganlar.push(todos[i]);
+    }
+  }
+  
   res.json(bajarilganlar);
 });
 ```
@@ -1933,6 +2135,8 @@ app.get('/completed', function(req, res) {
 * **DELETE** — ma'lumotni o'chirish.
 * **Array** — bir nechta obyektlarni tartibli saqlash uchun.
 * **Status kodlar** — 200 (OK), 201 (yaratildi), 400 (xato), 404 (topilmadi).
+* **HTML Form + fetch()** — brauzerdan serverga ma'lumot yuborish.
+* **For loop** — arrayni tekshirish uchun oddiy usul.
 
 ---
 
@@ -1944,6 +2148,8 @@ app.get('/completed', function(req, res) {
 ✅ ID avtomatik berishni
 ✅ Xatolarni to'g'ri qaytarishni
 ✅ CRUD amaliyotlarini
+✅ HTML forma bilan ma'lumot yuborishni
+✅ Oddiy for loop bilan array'da ishlashni
 
 **Keyingi hafta:** Ma'lumotni xotirada emas, faylda saqlashni o'rganamiz — server o'chsa ham ma'lumot saqlanadi! 💾
 
