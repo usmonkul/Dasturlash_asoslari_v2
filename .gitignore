@@ -4,3 +4,11 @@ test.*
 test/*
 test
 notes.md
+
+frontend/node_modules
+4.0_Backend_asoslari
+
+footballAPI
+footballAPI_v2
+SQL_Tutorial*
+SQLite*
